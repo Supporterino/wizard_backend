@@ -1,6 +1,6 @@
-# TypeScript_Boilerplate
+# Wizard cardgame
 
-This is a basic node.js setup with TypeScript as the language. The boilerplate also includes eslint and a setup for nodemon to watch changes.
+This repo will be a WIP implementation of the card game [Wizard](https://en.wikipedia.org/wiki/Wizard_(card_game)). The plan is to write the game as a server client structure with a NodeJS backend server.
 
 ## Usage
 

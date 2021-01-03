@@ -9,7 +9,10 @@ cache:
   paths:
     - node_modules/
 
-test_async:
+start_up:
   script:
     - npm install
+
+linting:
+  script:
     - npm run lint

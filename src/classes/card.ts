@@ -14,4 +14,8 @@ export class Card {
     getChar(): string {
         return this.char;
     }
+
+    toString() {
+        return `Card{color:"${this.color}", char:"${this.char}"}`
+    }
 }

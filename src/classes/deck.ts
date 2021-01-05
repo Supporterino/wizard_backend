@@ -43,6 +43,11 @@ export class Deck {
     }
 
     toString() {
-        return `Deck{card:[${this.cards.forEach(e => e.toString())}]}`
+        let output = 'Deck{cards:[ \n';
+        for (const card of this.cards) {
+            output += `\t ${card.toString()} \n`;
+        }
+        output += ']}';
+        return output;
     }
 }

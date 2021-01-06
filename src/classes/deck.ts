@@ -41,6 +41,11 @@ export class Deck {
                 this.cards.push(new Card(color, num.toString()));
             }
         }
+
+        for (let index = 0; index < 4; index++) {
+            this.cards.push(new Card('white', 'Sorcerer'));
+            this.cards.push(new Card('white', 'Fool'));
+        }
     }
 
     private shuffle(arr: Array<Card>): Array<Card> {

@@ -1,12 +1,12 @@
 import { gameID } from "../utils/idGen";
-import { Deck } from "./deck";
+import { Player } from "./player";
 
 export class Game {
-    private pile: Deck;
     private id: string;
+    private players: Array<Player>;
 
     constructor() {
         this.id = gameID();
-        this.pile = new Deck();
+        this.players = new Array<Player>();
     }
 }

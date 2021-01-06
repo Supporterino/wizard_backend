@@ -5,14 +5,28 @@ export class Deck {
 
     constructor() {
         this.cards = new Array<Card>();
-        this.construct_deck();
     }
 
-    getCards() {
+    getCards(): Array<Card> {
         return this.cards;
     }
 
-    private construct_deck() {
+    setNewDeck(): void {
+        this.cards = new Array<Card>();
+        this.fillDeck();
+        this.cards = this.shuffle(this.cards);
+    }
+
+    toString(): string {
+        let output = 'Deck{cards:[ \n';
+        for (const card of this.cards) {
+            output += `\t ${card.toString()} \n`;
+        }
+        output += ']}';
+        return output;
+    }
+
+    private fillDeck(): void {
         const colors = ["yellow", "green", "blue", "red"];
         const nums = [1,2,3,4,5,6,7,8,9,10,11,12,13];
 
@@ -21,11 +35,9 @@ export class Deck {
                 this.cards.push(new Card(color, num.toString()));
             }
         }
-
-        this.cards = this.shuffle(this.cards);
     }
 
-    private shuffle(arr: Array<Card>) {
+    private shuffle(arr: Array<Card>): Array<Card> {
         let currentIndex = this.cards.length;
         let temporaryValue: Card;
         let randomIndex: number;
@@ -40,14 +52,5 @@ export class Deck {
         }
 
         return arr;
-    }
-
-    toString() {
-        let output = 'Deck{cards:[ \n';
-        for (const card of this.cards) {
-            output += `\t ${card.toString()} \n`;
-        }
-        output += ']}';
-        return output;
     }
 }

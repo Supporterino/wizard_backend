@@ -15,7 +15,7 @@ export class Card {
         return this.char;
     }
 
-    toString() {
-        return `Card{color:"${this.color}", char:"${this.char}"}`
+    toString(): string {
+        return `Card{color:"${this.color}", char:"${this.char}"}`;
     }
 }

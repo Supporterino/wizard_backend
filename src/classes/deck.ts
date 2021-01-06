@@ -1,10 +1,16 @@
 import { Card } from './card';
+import { Player } from './player';
 
 export class Deck {
     private cards: Array<Card>;
 
     constructor() {
         this.cards = new Array<Card>();
+    }
+
+    dealCard(player: Player): void {
+        const element = this.cards.shift();
+        if (element) player.receiveCard(element);
     }
 
     getCards(): Array<Card> {

@@ -1,3 +1,4 @@
+import { removeElement } from "../utils/arrayLogic";
 import { Card } from "./card";
 
 export class Player {
@@ -9,8 +10,20 @@ export class Player {
         this.hand = new Array<Card>();
     }
 
+    getHand(): Array<Card> {
+        return this.hand;
+    }
+
     receiveCard(card: Card): void {
         this.hand.push(card);
+    }
+
+    playCard(card: Card): Card {
+        return removeElement(this.hand, card);
+    }
+
+    getID(): string {
+        return this.id;
     }
 
     toString(): string {

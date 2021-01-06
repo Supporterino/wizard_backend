@@ -9,6 +9,9 @@ const game = new Game();
 game.addPlayer(ply1);
 game.addPlayer(ply2);
 game.startNewRound();
+game.playTurn(ply1.getID(), ply1.getHand()[0]);
+game.playTurn(ply2.getID(), ply2.getHand()[0]);
 
-console.log(ply1.toString());
-console.log(ply2.toString());
+console.log(game.toString());
+//console.log(ply1.toString());
+//console.log(ply2.toString());

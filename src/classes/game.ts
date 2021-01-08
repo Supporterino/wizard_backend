@@ -27,13 +27,17 @@ export class Game {
     playTurn(playerID: string, card: Card): void {
         let end = this.round.playTurn(playerID, card);
         if (end) {
-            this.endRound();
+            this.endTurn();
         }
     }
 
-    endRound(): void {
-        console.log(`Round ${this.roundCounter} end.`);
-        this.roundCounter++;
+    endTurn(): void {
+        const winnerOfTurn = this.round.analyzeTurn();
+        const end = this.round.startNewTurn();
+        console.log(winnerOfTurn.toString());
+        if (end) {
+            console.log(`Round ${this.roundCounter} over.`)
+        }
     }
 
     toString(): string {

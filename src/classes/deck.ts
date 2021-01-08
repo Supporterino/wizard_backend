@@ -8,6 +8,10 @@ export class Deck {
         this.cards = new Array<Card>();
     }
 
+    getTopCard(): Card | undefined {
+        return this.cards.shift();
+    }
+
     dealCard(player: Player): void {
         const element = this.cards.shift();
         if (element) player.receiveCard(element);

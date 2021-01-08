@@ -10,6 +10,7 @@ export class Round {
     private turnCounter: number;
     private turns: number;
     private activePlayer: Player;
+    private dominantColor!: Card;
 
     constructor(n: number, plrs: Array<Player>) {
         this.num = n;
@@ -17,8 +18,8 @@ export class Round {
         this.turnCounter = 0;
         this.turns = n;
         this.deck = new Deck();
-        this.pile = new Array<Card>();
         this.activePlayer = this.players[0];
+        this.pile = new Array<Card>();
     }
 
     start() {
@@ -29,6 +30,22 @@ export class Round {
                 this.deck.dealCard(player);
             }            
         }
+
+        this.setDomColor();
+    }
+
+    startNewTurn(): boolean {
+        this.activePlayer = this.players[0];
+        this.pile = new Array<Card>();
+        this.turnCounter++;
+        if (this.turnCounter === this.turns) return true;
+        else return false;
+    }
+
+    setDomColor() {
+        const topCard = this.deck.getTopCard();
+        if (topCard) this.dominantColor = topCard;
+        else this.dominantColor = new Card('', '');
     }
 
     playTurn(playerID: string, card: Card): boolean {
@@ -43,8 +60,19 @@ export class Round {
             }
     }
 
-    analyzeTurn() {
-        
+    analyzeTurn(): Player {
+        let turncolor = '';
+        let winningCard: Card = this.pile[0];
+        for (let index = 0; index < this.pile.length; index++) {
+            if (turncolor === '' && this.pile[index].getColor() !== 'white') turncolor = this.pile[index].getColor();
+            if (this.pile[index].getChar() === 'Sorcerer' && winningCard.getChar() !== 'Sorcerer') winningCard = this.pile[index];
+            if (winningCard.getChar() !== 'Sorcerer') {
+                if (this.pile[index].getColor() === this.dominantColor.getColor() && winningCard.getColor() !== this.dominantColor.getColor()) winningCard = this.pile[index];
+                else if (this.pile[index].getColor() === this.dominantColor.getColor() && winningCard.getColor() === this.dominantColor.getColor() && +this.pile[index].getChar() >= +winningCard.getChar()) winningCard = this.pile[index];
+                else if (this.pile[index].getColor() === turncolor && +this.pile[index].getChar() >= +winningCard.getChar()) winningCard = this.pile[index];
+            }
+        }
+        return this.players[this.pile.indexOf(winningCard)];
     }
 
     addCardToPile(card: Card): void {

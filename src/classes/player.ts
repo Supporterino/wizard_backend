@@ -4,10 +4,24 @@ import { Card } from "./card";
 export class Player {
     private hand: Array<Card>;
     private id: string;
+    private hit: number;
 
     constructor(inID: string) {
         this.id = inID;
         this.hand = new Array<Card>();
+        this.hit = 0;
+    }
+
+    addHit(): void {
+        this.hit++;
+    }
+
+    getHitCounter(): number {
+        return this.hit;
+    }
+
+    resetHitCounter(): void {
+        this.hit = 0;
     }
 
     getHand(): Array<Card> {
@@ -27,7 +41,7 @@ export class Player {
     }
 
     toString(): string {
-        let output = `Player{id: ${this.id}, hand:[ \n`;
+        let output = `Player{id: ${this.id}, hit: ${this.hit}, hand:[ \n`;
         for (const card of this.hand) {
             output += `\t ${card.toString()} \n`;
         }

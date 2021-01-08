@@ -2,17 +2,24 @@ import { gameID } from "../utils/idGen";
 import { Card } from "./card";
 import { Player } from "./player";
 import { Round } from "./round";
+import { Scoreboard } from "./scoreboard";
 
 export class Game {
     private id: string;
     private players: Array<Player>;
     private roundCounter: number;
     private round!: Round;
+    private scoreboard!: Scoreboard;
 
     constructor() {
         this.id = gameID();
         this.players = new Array<Player>();
         this.roundCounter = 3;
+    }
+
+    startGame(): void {
+        this.scoreboard = new Scoreboard(this.players);
+        this.startNewRound();
     }
 
     addPlayer(player: Player): void {
@@ -24,17 +31,25 @@ export class Game {
         this.round.start();
     }
 
+    givePrediction(playerID: string, val: number): void {
+        if (playerID === this.round.getActivePlayer().getID()) {
+            this.scoreboard.receivePrediction(this.players.indexOf(this.round.getActivePlayer()), this.roundCounter, val);
+        }
+    }
+
     playTurn(playerID: string, card: Card): void {
-        let end = this.round.playTurn(playerID, card);
-        if (end) {
-            this.endTurn();
+        if (playerID === this.round.getActivePlayer().getID()) {
+            let end = this.round.playTurn(playerID, card);
+            if (end) {
+                this.endTurn();
+            }
         }
     }
 
     endTurn(): void {
         const winnerOfTurn = this.round.analyzeTurn();
+        winnerOfTurn.addHit();
         const end = this.round.startNewTurn();
-        console.log(winnerOfTurn.toString());
         if (end) {
             console.log(`Round ${this.roundCounter} over.`)
         }

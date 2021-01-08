@@ -22,6 +22,10 @@ export class Round {
         this.pile = new Array<Card>();
     }
 
+    getActivePlayer(): Player {
+        return this.activePlayer;
+    }
+
     start() {
         this.deck.setNewDeck();
 
@@ -86,7 +90,8 @@ export class Round {
         }
         output += `], \n'`;
         output += `${this.deck.toString()}, \n`;
-        output += `activePlayer: ${this.activePlayer.getID()}}`;
+        output += `activePlayer: ${this.activePlayer.getID()},`;
+        output += `turn: ${this.turnCounter} of ${this.turns}}`;
         return output;
     }
 }

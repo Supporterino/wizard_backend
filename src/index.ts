@@ -8,7 +8,7 @@ const game = new Game();
 
 game.addPlayer(ply1);
 game.addPlayer(ply2);
-game.startNewRound();
+game.startGame();
 game.playTurn(ply1.getID(), ply1.getHand()[0]);
 game.playTurn(ply2.getID(), ply2.getHand()[0]);
 

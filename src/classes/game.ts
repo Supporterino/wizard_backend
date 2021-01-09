@@ -46,7 +46,7 @@ export class Game {
 
     playTurn(playerID: string, card: Card): void {
         if (playerID === this.activePlayer.getID()) {
-            let end = this.round.playTurn(card);
+            const end = this.round.playTurn(card);
             this.continue();
             if (end) {
                 this.endTurn();

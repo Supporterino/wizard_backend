@@ -9,7 +9,7 @@ export class Round {
     private pile: Array<Card>;
     private turnCounter: number;
     private turns: number;
-    private activePlayer: Player;
+    private pointer: number;
     private dominantColor!: Card;
 
     constructor(n: number, plrs: Array<Player>) {
@@ -17,13 +17,18 @@ export class Round {
         this.players = plrs;
         this.turnCounter = 0;
         this.turns = n;
+        this.pointer = 0;
         this.deck = new Deck();
-        this.activePlayer = this.players[0];
         this.pile = new Array<Card>();
     }
 
-    getActivePlayer(): Player {
-        return this.activePlayer;
+    next(): Player {
+        if (this.pointer < this.players.length - 1) {
+            return this.players[this.pointer++];
+        } else {
+            this.pointer = 0;
+            return this.players[this.players.length - 1];
+        }
     }
 
     start() {
@@ -39,7 +44,7 @@ export class Round {
     }
 
     startNewTurn(): boolean {
-        this.activePlayer = this.players[0];
+        this.pointer = 0;
         this.pile = new Array<Card>();
         this.turnCounter++;
         if (this.turnCounter === this.turns) return true;
@@ -52,12 +57,11 @@ export class Round {
         else this.dominantColor = new Card('', '');
     }
 
-    playTurn(playerID: string, card: Card): boolean {
-            const toPlay = this.activePlayer.playCard(card);
+    playTurn(card: Card): boolean {
+            const toPlay = this.players[this.pointer].playCard(card);
             this.addCardToPile(toPlay);
     
-            if (this.activePlayer != this.players[this.players.length - 1]) {
-                this.activePlayer = this.players[this.players.indexOf(this.activePlayer) + 1];
+            if (this.pointer != this.players.length - 1) {
                 return false;
             } else {
                 return true;
@@ -90,7 +94,6 @@ export class Round {
         }
         output += `], \n'`;
         output += `${this.deck.toString()}, \n`;
-        output += `activePlayer: ${this.activePlayer.getID()},`;
         output += `turn: ${this.turnCounter} of ${this.turns}}`;
         return output;
     }

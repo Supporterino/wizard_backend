@@ -10,6 +10,7 @@ export class Game {
     private roundCounter: number;
     private round!: Round;
     private scoreboard!: Scoreboard;
+    private activePlayer!: Player;
 
     constructor() {
         this.id = gameID();
@@ -29,17 +30,24 @@ export class Game {
     startNewRound(): void {
         this.round = new Round(this.roundCounter, this.players);
         this.round.start();
+        this.activePlayer = this.round.next();
+    }
+
+    continue() {
+        this.activePlayer = this.round.next();
     }
 
     givePrediction(playerID: string, val: number): void {
-        if (playerID === this.round.getActivePlayer().getID()) {
-            this.scoreboard.receivePrediction(this.players.indexOf(this.round.getActivePlayer()), this.roundCounter, val);
+        if (playerID === this.activePlayer.getID()) {
+            this.scoreboard.receivePrediction(this.players.indexOf(this.activePlayer), this.roundCounter, val);
+            this.continue();
         }
     }
 
     playTurn(playerID: string, card: Card): void {
-        if (playerID === this.round.getActivePlayer().getID()) {
-            let end = this.round.playTurn(playerID, card);
+        if (playerID === this.activePlayer.getID()) {
+            let end = this.round.playTurn(card);
+            this.continue();
             if (end) {
                 this.endTurn();
             }

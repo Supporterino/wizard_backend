@@ -13,7 +13,8 @@
   "author": "Supporterino",
   "license": "GPL-3.0",
   "dependencies": {
-    "nanoid": "^3.1.20"
+    "nanoid": "^3.1.20",
+    "tslog": "^3.0.5"
   },
   "devDependencies": {
     "@types/node": "^14.14.7",

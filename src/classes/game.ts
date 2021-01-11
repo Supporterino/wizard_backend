@@ -3,6 +3,8 @@ import { Card } from "./card";
 import { Player } from "./player";
 import { Round } from "./round";
 import { Scoreboard } from "./scoreboard";
+import { log } from '../index';
+import { OutgoingMessage } from "http";
 
 export class Game {
     private id: string;
@@ -41,16 +43,21 @@ export class Game {
         if (playerID === this.activePlayer.getID()) {
             this.scoreboard.receivePrediction(this.players.indexOf(this.activePlayer), this.roundCounter, val);
             this.continue();
+        } else {
+            log.debug(`No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}`);
         }
     }
 
     playTurn(playerID: string, card: Card): void {
         if (playerID === this.activePlayer.getID()) {
-            const end = this.round.playTurn(card);
+            log.debug(`${playerID}`)
+            const end = this.round.playTurn(playerID, card);
             this.continue();
             if (end) {
                 this.endTurn();
             }
+        } else {
+            log.debug(`No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}`);
         }
     }
 

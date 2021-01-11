@@ -1,6 +1,7 @@
 import { Card } from "./card";
 import { Deck } from "./deck";
 import { Player } from "./player";
+import { log } from '../index';
 
 export class Round {
     private num: number;
@@ -57,11 +58,11 @@ export class Round {
         else this.dominantColor = new Card('', '');
     }
 
-    playTurn(card: Card): boolean {
-            const toPlay = this.players[this.pointer].playCard(card);
+    playTurn(playerID: string, card: Card): boolean {
+            const toPlay = this.players.filter(e => e.getID() == playerID)[0].playCard(card);
             this.addCardToPile(toPlay);
     
-            if (this.pointer != this.players.length - 1) {
+            if (this.pointer < this.players.length - 1) {
                 return false;
             } else {
                 return true;

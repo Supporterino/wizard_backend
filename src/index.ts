@@ -1,5 +1,8 @@
 import { Game } from "./classes/game";
 import { Player } from "./classes/player";
+import { Logger } from 'tslog';
+
+export const log: Logger = new Logger({ name: 'Wizard Backend' });
 
 const ply1 = new Player("Henry");
 const ply2 = new Player("John");

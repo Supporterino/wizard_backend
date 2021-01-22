@@ -52,9 +52,11 @@ export class Game {
         if (playerID === this.activePlayer.getID()) {
             log.debug(`${playerID}`)
             const end = this.round.playTurn(playerID, card);
-            this.continue();
             if (end) {
                 this.endTurn();
+                this.continue();
+            } else {
+                this.continue();
             }
         } else {
             log.debug(`No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}`);

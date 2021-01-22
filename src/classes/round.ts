@@ -62,7 +62,7 @@ export class Round {
             const toPlay = this.players.filter(e => e.getID() == playerID)[0].playCard(card);
             this.addCardToPile(toPlay);
     
-            if (this.pointer < this.players.length - 1) {
+            if (this.pointer == this.players.length - 1) {
                 return false;
             } else {
                 return true;

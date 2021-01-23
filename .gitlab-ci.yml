@@ -12,7 +12,4 @@ cache:
 start_up:
   script:
     - npm install
-
-linting:
-  script:
     - npm run lint

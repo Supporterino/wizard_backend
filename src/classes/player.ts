@@ -16,6 +16,12 @@ export class Player {
         this.hit++;
     }
 
+    pullHit(): number {
+        const temp = this.hit;
+        this.hit = 0;
+        return temp;
+    }
+
     getHitCounter(): number {
         return this.hit;
     }

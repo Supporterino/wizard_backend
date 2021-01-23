@@ -21,6 +21,26 @@ export class Scoreboard {
         this.board[index][rc].setTarget(val);
     }
 
+    analyzeRound(rc: number) {
+        for (let index = 0; index < this.board.length; index++) {
+            if (rc == 1) {
+                const roundScore = this.getScoreForRound(this.board[index][rc].getTarget(), this.players[index].pullHit());
+                this.board[index][rc].setScore(roundScore);
+            } else {
+                const roundScore = this.getScoreForRound(this.board[index][rc].getTarget(), this.players[index].pullHit());
+                this.board[index][rc].setScore(this.board[index][rc - 1].getScore() + roundScore);
+            }
+        }
+    }
+
+    getScoreForRound(target: number, hit: number): number {
+        if (target == hit) {
+            return 20 + hit * 10;
+        } else {
+            return -10 + Math.abs(target - hit) * (-10)
+        }
+    }
+
     getMaxRoundNumber(): number {
         switch (this.players.length) {
             case 3:

@@ -68,7 +68,8 @@ export class Game {
         winnerOfTurn.addHit();
         const end = this.round.startNewTurn();
         if (end) {
-            console.log(`Round ${this.roundCounter} over.`)
+            this.scoreboard.analyzeRound(this.roundCounter);
+            log.debug(`Round ${this.roundCounter} is over.`)
         }
     }
 

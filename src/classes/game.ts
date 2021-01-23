@@ -4,7 +4,6 @@ import { Player } from "./player";
 import { Round } from "./round";
 import { Scoreboard } from "./scoreboard";
 import { log } from '../index';
-import { OutgoingMessage } from "http";
 
 export class Game {
     private id: string;
@@ -35,7 +34,7 @@ export class Game {
         this.activePlayer = this.round.next();
     }
 
-    continue() {
+    continue(): void {
         this.activePlayer = this.round.next();
     }
 

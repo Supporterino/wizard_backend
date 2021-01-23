@@ -9,7 +9,7 @@ export class Scoreboard {
         this.initBoard();
     }
 
-    initBoard() {
+    initBoard(): void {
         this.board = new Array<Array<ScoreEntry>>(this.players.length);
         const max = this.getMaxRoundNumber();
         for (let index = 0; index < this.board.length; index++) {
@@ -17,11 +17,11 @@ export class Scoreboard {
         }
     }
 
-    receivePrediction(index: number, rc: number, val: number) {
+    receivePrediction(index: number, rc: number, val: number): void {
         this.board[index][rc].setTarget(val);
     }
 
-    analyzeRound(rc: number) {
+    analyzeRound(rc: number): void {
         for (let index = 0; index < this.board.length; index++) {
             if (rc == 1) {
                 const roundScore = this.getScoreForRound(this.board[index][rc].getTarget(), this.players[index].pullHit());

@@ -32,7 +32,7 @@ export class Round {
         }
     }
 
-    start() {
+    start(): void {
         this.deck.setNewDeck();
 
         for (let index = 0; index < this.num; index++) {
@@ -52,7 +52,7 @@ export class Round {
         else return false;
     }
 
-    setDomColor() {
+    setDomColor(): void {
         const topCard = this.deck.getTopCard();
         if (topCard) this.dominantColor = topCard;
         else this.dominantColor = new Card('', '');

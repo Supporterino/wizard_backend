@@ -38,7 +38,7 @@ export class Round {
         for (let index = 0; index < this.num; index++) {
             for (const player of this.players) {
                 this.deck.dealCard(player);
-            }            
+            }
         }
 
         this.setDomColor();
@@ -56,20 +56,22 @@ export class Round {
         const topCard = this.deck.getTopCard();
         if (topCard) this.dominantColor = topCard;
         else this.dominantColor = new Card('', '');
+        log.debug(`Dominant Color is ${this.dominantColor.getColor()}`);
     }
 
     playTurn(playerID: string, card: Card): boolean {
             const toPlay = this.players.filter(e => e.getID() == playerID)[0].playCard(card);
             this.addCardToPile(toPlay);
     
-            if (this.pointer == this.players.length - 1) {
-                return false;
-            } else {
+            if (playerID == this.players[this.players.length - 1].getID()) {
                 return true;
+            } else {
+                return false;
             }
     }
 
     analyzeTurn(): Player {
+        log.debug(`Analyzing turn with following pile: ${this.pile.toString()}.`);
         let turncolor = '';
         let winningCard: Card = this.pile[0];
         for (let index = 0; index < this.pile.length; index++) {
@@ -81,6 +83,7 @@ export class Round {
                 else if (this.pile[index].getColor() === turncolor && +this.pile[index].getChar() >= +winningCard.getChar()) winningCard = this.pile[index];
             }
         }
+        log.debug(`Winning card: ${winningCard.toString()}.`)
         return this.players[this.pile.indexOf(winningCard)];
     }
 

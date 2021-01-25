@@ -25,6 +25,7 @@ export class Game {
     }
 
     addPlayer(player: Player): void {
+        log.debug(`Adding ${player.getID()} to game ${this.id}.`);
         this.players.push(player);
     }
 
@@ -32,24 +33,28 @@ export class Game {
         this.round = new Round(this.roundCounter, this.players);
         this.round.start();
         this.activePlayer = this.round.next();
+        log.debug(`Starting Round ${this.roundCounter}.`);
+        log.debug(`Initial player is ${this.activePlayer.getID()}.`);
     }
 
     continue(): void {
         this.activePlayer = this.round.next();
+        log.debug(`Next player is ${this.activePlayer.getID()}.`);
     }
 
     givePrediction(playerID: string, val: number): void {
+        log.debug(`${playerID} setting prediction to ${val}.`)
         if (playerID === this.activePlayer.getID()) {
             this.scoreboard.receivePrediction(this.players.indexOf(this.activePlayer), this.roundCounter, val);
             this.continue();
         } else {
-            log.debug(`No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}`);
+            log.warn(`No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}.`);
         }
     }
 
     playTurn(playerID: string, card: Card): void {
+        log.debug(`${playerID} is playing card: ${card.toString()}`);
         if (playerID === this.activePlayer.getID()) {
-            log.debug(`${playerID}`)
             const end = this.round.playTurn(playerID, card);
             if (end) {
                 this.endTurn();
@@ -63,13 +68,19 @@ export class Game {
     }
 
     endTurn(): void {
+        log.debug(`Turn end.`);
         const winnerOfTurn = this.round.analyzeTurn();
+        log.debug(`Winner of Turn: ${winnerOfTurn.getID()}`);
         winnerOfTurn.addHit();
         const end = this.round.startNewTurn();
         if (end) {
             this.scoreboard.analyzeRound(this.roundCounter);
             log.debug(`Round ${this.roundCounter} is over.`)
         }
+    }
+
+    printScoreboard(): string {
+        return this.scoreboard.toString();
     }
 
     toString(): string {

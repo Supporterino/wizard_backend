@@ -1,5 +1,6 @@
 import { removeElement } from "../utils/arrayLogic";
 import { Card } from "./card";
+import { log } from '../index';
 
 export class Player {
     private hand: Array<Card>;
@@ -13,10 +14,12 @@ export class Player {
     }
 
     addHit(): void {
+        log.debug(`Adding hit to ${this.id}.`);
         this.hit++;
     }
 
     pullHit(): number {
+        log.debug(`Retrieving hits for ${this.id}.`);
         const temp = this.hit;
         this.hit = 0;
         return temp;
@@ -24,10 +27,6 @@ export class Player {
 
     getHitCounter(): number {
         return this.hit;
-    }
-
-    resetHitCounter(): void {
-        this.hit = 0;
     }
 
     getHand(): Array<Card> {

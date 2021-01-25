@@ -14,6 +14,9 @@ export class Scoreboard {
         const max = this.getMaxRoundNumber();
         for (let index = 0; index < this.board.length; index++) {
             this.board[index] = new Array<ScoreEntry>(max);
+            for (let i = 0; i < max; i++) {
+                this.board[index][i] = new ScoreEntry();
+            }
         }
     }
 
@@ -54,6 +57,19 @@ export class Scoreboard {
             default:
                 return 0;
         }
+    }
+
+    toString(): string {
+        let output = `Scoreboard: {`
+        for (const index in this.players) {
+            output += `${this.players[index].getID()}: {`
+            for (const score of this.board[index]) {
+                output += `${score.getScore()}, `
+            }
+            output += `}\n`
+        }
+        output += `}`
+        return output;
     }
 }
 

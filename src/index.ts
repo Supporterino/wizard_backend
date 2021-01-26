@@ -13,10 +13,20 @@ const game = new Game();
 game.addPlayer(ply1);
 game.addPlayer(ply2);
 game.addPlayer(ply3);
+
 game.startGame();
+
+game.givePrediction(ply1.getID(), 1);
+game.givePrediction(ply2.getID(), 1);
+game.givePrediction(ply3.getID(), 1);
+
 game.playTurn(ply1.getID(), ply1.getHand()[0]);
 game.playTurn(ply2.getID(), ply2.getHand()[0]);
 game.playTurn(ply3.getID(), ply3.getHand()[0]);
+
+game.givePrediction(ply1.getID(), 1);
+game.givePrediction(ply2.getID(), 1);
+game.givePrediction(ply3.getID(), 1);
 
 game.playTurn(ply1.getID(), ply1.getHand()[0]);
 game.playTurn(ply2.getID(), ply2.getHand()[0]);

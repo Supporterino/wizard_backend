@@ -21,17 +21,17 @@ export class Scoreboard {
     }
 
     receivePrediction(index: number, rc: number, val: number): void {
-        this.board[index][rc].setTarget(val);
+        this.board[index][rc - 1].setTarget(val);
     }
 
     analyzeRound(rc: number): void {
         for (let index = 0; index < this.board.length; index++) {
             if (rc == 1) {
-                const roundScore = this.getScoreForRound(this.board[index][rc].getTarget(), this.players[index].pullHit());
-                this.board[index][rc].setScore(roundScore);
+                const roundScore = this.getScoreForRound(this.board[index][rc - 1].getTarget(), this.players[index].pullHit());
+                this.board[index][rc - 1].setScore(roundScore);
             } else {
-                const roundScore = this.getScoreForRound(this.board[index][rc].getTarget(), this.players[index].pullHit());
-                this.board[index][rc].setScore(this.board[index][rc - 1].getScore() + roundScore);
+                const roundScore = this.getScoreForRound(this.board[index][rc - 1].getTarget(), this.players[index].pullHit());
+                this.board[index][rc - 1].setScore(this.board[index][rc - 2].getScore() + roundScore);
             }
         }
     }

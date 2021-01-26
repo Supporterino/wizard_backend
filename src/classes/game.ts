@@ -16,7 +16,7 @@ export class Game {
     constructor() {
         this.id = gameID();
         this.players = new Array<Player>();
-        this.roundCounter = 3;
+        this.roundCounter = 1;
     }
 
     startGame(): void {
@@ -58,7 +58,6 @@ export class Game {
             const end = this.round.playTurn(playerID, card);
             if (end) {
                 this.endTurn();
-                this.continue();
             } else {
                 this.continue();
             }
@@ -75,7 +74,11 @@ export class Game {
         const end = this.round.startNewTurn();
         if (end) {
             this.scoreboard.analyzeRound(this.roundCounter);
-            log.debug(`Round ${this.roundCounter} is over.`)
+            log.debug(`Round ${this.roundCounter} is over.`);
+            this.roundCounter++;
+            this.startNewRound();
+        } else {
+            this.continue();
         }
     }
 

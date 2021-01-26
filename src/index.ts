@@ -1,42 +1,27 @@
-import { Game } from "./classes/game";
-import { Player } from "./classes/player";
 import { Logger } from 'tslog';
+import helmet from 'helmet';
+import cors from 'cors';
+import express from 'express';
 
-export const log: Logger = new Logger({ name: 'Wizard Backend' });
+export const log: Logger = new Logger({
+    name: 'wizard_backend',
+    minLevel: 'silly',
+    dateTimeTimezone: 'Europe/Berlin'
+});
 
-const ply1 = new Player("Henry");
-const ply2 = new Player("John");
-const ply3 = new Player("Hayley");
+const app: express.Application = express();
 
-const game = new Game();
+app.use(helmet.dnsPrefetchControl());
+app.use(helmet.expectCt());
+app.use(helmet.frameguard());
+app.use(helmet.hidePoweredBy());
+app.use(helmet.hsts());
+app.use(helmet.ieNoOpen());
+app.use(helmet.noSniff());
+app.use(helmet.permittedCrossDomainPolicies());
+app.use(helmet.referrerPolicy());
+app.use(helmet.xssFilter());
 
-game.addPlayer(ply1);
-game.addPlayer(ply2);
-game.addPlayer(ply3);
-
-game.startGame();
-
-game.givePrediction(ply1.getID(), 1);
-game.givePrediction(ply2.getID(), 1);
-game.givePrediction(ply3.getID(), 1);
-
-game.playTurn(ply1.getID(), ply1.getHand()[0]);
-game.playTurn(ply2.getID(), ply2.getHand()[0]);
-game.playTurn(ply3.getID(), ply3.getHand()[0]);
-
-game.givePrediction(ply1.getID(), 1);
-game.givePrediction(ply2.getID(), 1);
-game.givePrediction(ply3.getID(), 1);
-
-game.playTurn(ply1.getID(), ply1.getHand()[0]);
-game.playTurn(ply2.getID(), ply2.getHand()[0]);
-game.playTurn(ply3.getID(), ply3.getHand()[0]);
-
-game.playTurn(ply1.getID(), ply1.getHand()[0]);
-game.playTurn(ply2.getID(), ply2.getHand()[0]);
-game.playTurn(ply3.getID(), ply3.getHand()[0]);
-
-console.log(game.printScoreboard())
-//console.log(game.toString());
-//console.log(ply1.toString());
-//console.log(ply2.toString());
+app.use(express.json());
+app.enable('trust proxy');
+app.use(cors());

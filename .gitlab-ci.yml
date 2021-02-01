@@ -9,7 +9,6 @@ build:
   image: docker:19.03.12
   stage: build
   script:
-    - echo $DOCKER_PW
-    - docker login --username "supporterino" --password "$DOCKER_PW"
+    - echo $DOCKER_PW | docker login --username "supporterino" --password-stdin
     - docker build -t supporterino/wizard:ci .
     - docker push supporterino/wizard

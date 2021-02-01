@@ -10,6 +10,6 @@ build:
   stage: build
   script:
     - echo $DOCKER_PW
-    - docker login --username supporterino --password $DOCKER_PW
+    - docker login --username "supporterino" --password "$DOCKER_PW"
     - docker build -t supporterino/wizard:ci .
     - docker push supporterino/wizard

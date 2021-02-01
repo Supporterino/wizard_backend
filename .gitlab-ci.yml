@@ -9,4 +9,4 @@ build:
   image: docker:19.03.12
   stage: build
   script:
-    - docker build -t supporterino/wizard:latest .
+    - docker build -t supporterino/wizard:ci .

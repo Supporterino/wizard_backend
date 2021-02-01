@@ -10,3 +10,4 @@ build:
   stage: build
   script:
     - docker build -t supporterino/wizard:ci .
+    - docker push supporterino/wizard

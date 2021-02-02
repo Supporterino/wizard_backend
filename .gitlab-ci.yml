@@ -6,7 +6,7 @@ test:
     - npm run lint
 
 build:
-  image: docker:latest
+  image: jdrouet/docker-with-buildx:stable
   stage: build
   script:
     - echo $DOCKER_PW

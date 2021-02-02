@@ -11,6 +11,6 @@ build:
   script:
     - echo $DOCKER_PW
     - echo $DOCKER_PW | docker login --username supporterino --password-stdin
-    - docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag supporterino/wizard:ci . 
+    - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag supporterino/wizard:ci . 
     #- docker build -t supporterino/wizard:ci .
-    #- docker push supporterino/wizard
+    - docker push supporterino/wizard

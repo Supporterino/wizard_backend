@@ -18,7 +18,7 @@ ENV NODE_ENV=production
 
 COPY package*.json ./
 #COPY ./client ./client
-RUN npm ci --quiet --only=production
+RUN npm ci
 
 COPY --from=builder /usr/src/app/build ./build
 

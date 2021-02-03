@@ -7,8 +7,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY tsconfig*.json ./
 COPY ./src ./src
-CMD ["npm", "ci"]
-CMD ["npm", "run build"]
+RUN npm ci && npm run build
 
 # Production stage
 

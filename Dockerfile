@@ -1,17 +1,18 @@
 # Building stage
 
-FROM node:12.17.0 AS builder
+FROM node:12.20.1 AS builder
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 COPY tsconfig*.json ./
 COPY ./src ./src
-RUN npm ci --quiet && npm run build
+CMD ["npm", "ci"]
+CMD ["npm", "run build"]
 
 # Production stage
 
-FROM node:12.17.0-alpine
+FROM node:12.20.1-alpine
 
 WORKDIR /app
 ENV NODE_ENV=production

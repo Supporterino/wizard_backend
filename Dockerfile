@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY tsconfig*.json ./
 COPY ./src ./src
-RUN npm ci && npm run build
+RUN npm i && npm run build
 
 # Production stage
 
@@ -18,7 +18,7 @@ ENV NODE_ENV=production
 
 COPY package*.json ./
 #COPY ./client ./client
-RUN npm ci
+RUN npm i
 
 COPY --from=builder /usr/src/app/build ./build
 

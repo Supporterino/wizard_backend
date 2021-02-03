@@ -11,7 +11,7 @@ RUN npm ci && npm run build
 
 # Production stage
 
-FROM node:12.20.1-alpine
+FROM node:12.20.1
 
 WORKDIR /app
 ENV NODE_ENV=production

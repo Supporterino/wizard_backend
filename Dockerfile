@@ -6,6 +6,9 @@ COPY package*.json ./
 COPY tsconfig*.json ./
 COPY ./src ./src
 
+RUN npm -v
+RUN node -v
+
 RUN npm install --loglevel verbose
 RUN npm run build
 

@@ -5,20 +5,34 @@ test:
     - npm install
     - npm run lint
 
-build:
-  image: jdrouet/docker-with-buildx:stable
+buildx:
+  image: docker:19.03-git
+  stage: buildx
   variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
+  artifacts:
+    paths:
+      - buildx
+    expire_in: 1 hour
+  services:
+    - docker:19.03-dind
+  script:
+    - export DOCKER_BUILDKIT=1
+    - git clone git://github.com/docker/buildx ./docker-buildx
+    - docker build --platform=local -o . ./docker-buildx
 
-  #services:
-  #  - name: docker:dind
-  #    alias: docker
-  stage: build
+deploy:
+  image: docker:19.03
+  stage: deploy
+  services:
+    - name: docker:19.03-dind
+      command: ["--experimental"]
+  before_script:
+    - mkdir -p ~/.docker/cli-plugins
+    - mv buildx ~/.docker/cli-plugins/docker-buildx
+    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
   script:
     - echo $DOCKER_PW
     - echo $DOCKER_PW | docker login --username supporterino --password-stdin
-    - docker buildx create --use
-    - docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag supporterino/wizard:ci . 
-    #- docker build -t supporterino/wizard:ci .
-    - docker push supporterino/wizard
+    - docker buildx create --use --name mybuilder
+    - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --push -t supporterino/wizard:ci . 

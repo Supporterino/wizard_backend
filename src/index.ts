@@ -1,13 +1,15 @@
 import { Logger } from 'tslog';
-import helmet from 'helmet';
-import cors from 'cors';
-import express from 'express';
 
 export const log: Logger = new Logger({
     name: 'wizard_backend',
     minLevel: 'silly',
     dateTimeTimezone: 'Europe/Berlin'
 });
+
+import helmet from 'helmet';
+import cors from 'cors';
+import express from 'express';
+import { router } from './api/routes';
 
 const app: express.Application = express();
 
@@ -28,6 +30,8 @@ app.use(express.json());
 app.enable('trust proxy');
 app.use(cors());
 
+app.use('/api', router);
+
 app.use('/', (req, res) => {
     res.json(
         {
@@ -36,7 +40,8 @@ app.use('/', (req, res) => {
             clientEndpoint: 'https://wizardonline.de/client'
         }
     );
-})
+});
+
 app.listen(port, () => {
     log.info(`Server started. Listening on port ${port}`)
-})
+});

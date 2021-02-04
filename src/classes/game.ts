@@ -86,6 +86,10 @@ export class Game {
         return this.scoreboard.toString();
     }
 
+    getID(): string {
+        return this.id;
+    }
+
     toString(): string {
         let output = `Game{id: ${this.id}, \n`;
         output += `counter: ${this.roundCounter}, \n`;

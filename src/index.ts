@@ -43,5 +43,5 @@ app.use('/', (req, res) => {
 });
 
 app.listen(port, () => {
-    log.info(`Server started. Listening on port ${port}`)
+    log.info(`Server started. Listening on port ${port}`);
 });

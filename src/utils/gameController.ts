@@ -12,12 +12,12 @@ export class GameController {
         log.info(`GameController (${this.id}) created.`);
     }
 
-    addGame(val: Game) {
+    addGame(val: Game): void {
         const num = this.games.push(val);
         log.info(`Game (${val.getID()}) added to controller. Total games: ${num}.`)
     }
 
-    getGameById(id: string) {
+    getGameById(id: string): Game {
         const result = this.games.filter(e => {return e.getID() === id});
         return result[0];
     }

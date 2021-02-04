@@ -19,8 +19,8 @@ RUN npm run build
 RUN rm -R /app/node_modules
 RUN rm -R /app/src
 
-RUN npm install --only=production
-
 ENV NODE_ENV=production
+
+RUN npm install --only=production
 
 CMD [ "node", "/app/build/index.js" ]

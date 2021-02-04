@@ -8,10 +8,10 @@ const controller: GameController = new GameController();
 router.get('/newGame', (req, res) => {
     const newGame: Game = new Game();
     controller.addGame(newGame);
-    
+
     res.json({
         msg: 'Game created.',
-        gameID: `${newGame.getID()}`
+        gameID: `${newGame.getID()}`,
     });
 });
 

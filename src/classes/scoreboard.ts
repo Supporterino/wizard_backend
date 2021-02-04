@@ -1,4 +1,4 @@
-import { Player } from "./player";
+import { Player } from './player';
 
 export class Scoreboard {
     private players: Array<Player>;
@@ -27,11 +27,19 @@ export class Scoreboard {
     analyzeRound(rc: number): void {
         for (let index = 0; index < this.board.length; index++) {
             if (rc == 1) {
-                const roundScore = this.getScoreForRound(this.board[index][rc - 1].getTarget(), this.players[index].pullHit());
+                const roundScore = this.getScoreForRound(
+                    this.board[index][rc - 1].getTarget(),
+                    this.players[index].pullHit()
+                );
                 this.board[index][rc - 1].setScore(roundScore);
             } else {
-                const roundScore = this.getScoreForRound(this.board[index][rc - 1].getTarget(), this.players[index].pullHit());
-                this.board[index][rc - 1].setScore(this.board[index][rc - 2].getScore() + roundScore);
+                const roundScore = this.getScoreForRound(
+                    this.board[index][rc - 1].getTarget(),
+                    this.players[index].pullHit()
+                );
+                this.board[index][rc - 1].setScore(
+                    this.board[index][rc - 2].getScore() + roundScore
+                );
             }
         }
     }
@@ -40,7 +48,7 @@ export class Scoreboard {
         if (target == hit) {
             return 20 + hit * 10;
         } else {
-            return -10 + Math.abs(target - hit) * (-10)
+            return -10 + Math.abs(target - hit) * -10;
         }
     }
 
@@ -60,15 +68,15 @@ export class Scoreboard {
     }
 
     toString(): string {
-        let output = `Scoreboard: {`
+        let output = `Scoreboard: {`;
         for (const index in this.players) {
-            output += `${this.players[index].getID()}: {`
+            output += `${this.players[index].getID()}: {`;
             for (const score of this.board[index]) {
-                output += `${score.getScore()}, `
+                output += `${score.getScore()}, `;
             }
-            output += `}\n`
+            output += `}\n`;
         }
-        output += `}`
+        output += `}`;
         return output;
     }
 }
@@ -86,7 +94,7 @@ class ScoreEntry {
     }
 
     getTarget(): number {
-        return this.target
+        return this.target;
     }
 
     setScore(val: number) {

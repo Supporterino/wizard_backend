@@ -1,8 +1,8 @@
-import { gameID } from "../utils/idGen";
-import { Card } from "./card";
-import { Player } from "./player";
-import { Round } from "./round";
-import { Scoreboard } from "./scoreboard";
+import { gameID } from '../utils/idGen';
+import { Card } from './card';
+import { Player } from './player';
+import { Round } from './round';
+import { Scoreboard } from './scoreboard';
 import { log } from '../index';
 
 export class Game {
@@ -43,12 +43,18 @@ export class Game {
     }
 
     givePrediction(playerID: string, val: number): void {
-        log.debug(`${playerID} setting prediction to ${val}.`)
+        log.debug(`${playerID} setting prediction to ${val}.`);
         if (playerID === this.activePlayer.getID()) {
-            this.scoreboard.receivePrediction(this.players.indexOf(this.activePlayer), this.roundCounter, val);
+            this.scoreboard.receivePrediction(
+                this.players.indexOf(this.activePlayer),
+                this.roundCounter,
+                val
+            );
             this.continue();
         } else {
-            log.warn(`No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}.`);
+            log.warn(
+                `No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}.`
+            );
         }
     }
 
@@ -62,7 +68,9 @@ export class Game {
                 this.continue();
             }
         } else {
-            log.debug(`No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}`);
+            log.debug(
+                `No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}`
+            );
         }
     }
 

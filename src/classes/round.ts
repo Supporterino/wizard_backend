@@ -1,6 +1,6 @@
-import { Card } from "./card";
-import { Deck } from "./deck";
-import { Player } from "./player";
+import { Card } from './card';
+import { Deck } from './deck';
+import { Player } from './player';
 import { log } from '../index';
 
 export class Round {
@@ -60,30 +60,54 @@ export class Round {
     }
 
     playTurn(playerID: string, card: Card): boolean {
-            const toPlay = this.players.filter(e => e.getID() == playerID)[0].playCard(card);
-            this.addCardToPile(toPlay);
-    
-            if (playerID == this.players[this.players.length - 1].getID()) {
-                return true;
-            } else {
-                return false;
-            }
+        const toPlay = this.players
+            .filter((e) => e.getID() == playerID)[0]
+            .playCard(card);
+        this.addCardToPile(toPlay);
+
+        if (playerID == this.players[this.players.length - 1].getID()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     analyzeTurn(): Player {
-        log.debug(`Analyzing turn with following pile: ${this.pile.toString()}.`);
+        log.debug(
+            `Analyzing turn with following pile: ${this.pile.toString()}.`
+        );
         let turncolor = '';
         let winningCard: Card = this.pile[0];
         for (let index = 0; index < this.pile.length; index++) {
-            if (turncolor === '' && this.pile[index].getColor() !== 'white') turncolor = this.pile[index].getColor();
-            if (this.pile[index].getChar() === 'Sorcerer' && winningCard.getChar() !== 'Sorcerer') winningCard = this.pile[index];
+            if (turncolor === '' && this.pile[index].getColor() !== 'white')
+                turncolor = this.pile[index].getColor();
+            if (
+                this.pile[index].getChar() === 'Sorcerer' &&
+                winningCard.getChar() !== 'Sorcerer'
+            )
+                winningCard = this.pile[index];
             if (winningCard.getChar() !== 'Sorcerer') {
-                if (this.pile[index].getColor() === this.dominantColor.getColor() && winningCard.getColor() !== this.dominantColor.getColor()) winningCard = this.pile[index];
-                else if (this.pile[index].getColor() === this.dominantColor.getColor() && winningCard.getColor() === this.dominantColor.getColor() && +this.pile[index].getChar() >= +winningCard.getChar()) winningCard = this.pile[index];
-                else if (this.pile[index].getColor() === turncolor && +this.pile[index].getChar() >= +winningCard.getChar()) winningCard = this.pile[index];
+                if (
+                    this.pile[index].getColor() ===
+                        this.dominantColor.getColor() &&
+                    winningCard.getColor() !== this.dominantColor.getColor()
+                )
+                    winningCard = this.pile[index];
+                else if (
+                    this.pile[index].getColor() ===
+                        this.dominantColor.getColor() &&
+                    winningCard.getColor() === this.dominantColor.getColor() &&
+                    +this.pile[index].getChar() >= +winningCard.getChar()
+                )
+                    winningCard = this.pile[index];
+                else if (
+                    this.pile[index].getColor() === turncolor &&
+                    +this.pile[index].getChar() >= +winningCard.getChar()
+                )
+                    winningCard = this.pile[index];
             }
         }
-        log.debug(`Winning card: ${winningCard.toString()}.`)
+        log.debug(`Winning card: ${winningCard.toString()}.`);
         return this.players[this.pile.indexOf(winningCard)];
     }
 

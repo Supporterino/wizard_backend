@@ -1,6 +1,6 @@
 import { Game } from '../classes/game';
 import { log } from '../index';
-import { controllerID } from "../utils/idGen";
+import { controllerID } from '../utils/idGen';
 
 export class GameController {
     private id: string;
@@ -14,11 +14,15 @@ export class GameController {
 
     addGame(val: Game): void {
         const num = this.games.push(val);
-        log.info(`Game (${val.getID()}) added to controller. Total games: ${num}.`)
+        log.info(
+            `Game (${val.getID()}) added to controller. Total games: ${num}.`
+        );
     }
 
     getGameById(id: string): Game {
-        const result = this.games.filter(e => {return e.getID() === id});
+        const result = this.games.filter((e) => {
+            return e.getID() === id;
+        });
         return result[0];
     }
 }

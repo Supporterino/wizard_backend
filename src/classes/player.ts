@@ -1,5 +1,5 @@
-import { removeElement } from "../utils/arrayLogic";
-import { Card } from "./card";
+import { removeElement } from '../utils/arrayLogic';
+import { Card } from './card';
 import { log } from '../index';
 
 export class Player {

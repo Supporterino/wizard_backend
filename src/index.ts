@@ -3,7 +3,7 @@ import { Logger } from 'tslog';
 export const log: Logger = new Logger({
     name: 'wizard_backend',
     minLevel: 'silly',
-    dateTimeTimezone: 'Europe/Berlin'
+    dateTimeTimezone: 'Europe/Berlin',
 });
 
 import helmet from 'helmet';
@@ -33,13 +33,12 @@ app.use(cors());
 app.use('/api', router);
 
 app.use('/', (req, res) => {
-    res.json(
-        {
-            msg: 'This is the root endpoint of wizard only. The game has two definded endpoints listed as json elements in this message.',
-            apiEndpoint: 'https://wizardonline.de/api',
-            clientEndpoint: 'https://wizardonline.de/client'
-        }
-    );
+    res.json({
+        msg:
+            'This is the root endpoint of wizard only. The game has two definded endpoints listed as json elements in this message.',
+        apiEndpoint: 'https://wizardonline.de/api',
+        clientEndpoint: 'https://wizardonline.de/client',
+    });
 });
 
 app.listen(port, () => {

@@ -8,6 +8,7 @@ COPY ./src ./src
 
 # update 
 RUN apt-get update
+RUN apt-get install apt-utils -y
 # install curl 
 RUN apt-get install curl -y
 # get install script and pass it to execute: 

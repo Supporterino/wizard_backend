@@ -6,7 +6,7 @@ COPY package*.json ./
 COPY tsconfig*.json ./
 COPY ./src ./src
 
-RUN npm install --loglevel verbose
+RUN npm install
 RUN npm run build
 
 ENV NODE_ENV=production

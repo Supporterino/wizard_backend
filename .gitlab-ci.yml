@@ -22,7 +22,7 @@ build:
     - echo $DOCKER_PW | docker login --username supporterino --password-stdin
     - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
     - docker buildx create --use
-    - docker buildx build --push --platform linux/arm64/v8 --push -t supporterino/wizard:ci . 
+    - docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --push -t supporterino/wizard:ci . 
     # linux/arm/v7,,linux/amd64
     #- docker build -t supporterino/wizard:ci .
     #- docker push supporterino/wizard

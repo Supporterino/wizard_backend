@@ -1,4 +1,4 @@
-FROM node:latest
+FROM ubuntu:focal
 
 WORKDIR /app
 
@@ -6,7 +6,18 @@ COPY package*.json ./
 COPY tsconfig*.json ./
 COPY ./src ./src
 
-RUN apt-get -y install npm
+# update 
+RUN apt-get update
+# install curl 
+RUN apt-get install curl
+# get install script and pass it to execute: 
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
+# and install node 
+RUN apt-get install nodejs
+# confirm that it was successful 
+RUN node -v
+# npm installs automatically 
+RUN npm -v
 
 RUN npm install
 RUN npm run build

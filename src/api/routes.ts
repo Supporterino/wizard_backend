@@ -29,7 +29,7 @@ router.post('/addPlayer', (req, res) => {
 
     if (gameID === '') {
         log.warn(
-            `Tried to add player without gameID. ${JSON.stringify(req.body)}`
+            `Tried to add player without gameID.`, req.body
         );
         res.status(409).json({
             msg: 'No game id present in body.',
@@ -40,7 +40,7 @@ router.post('/addPlayer', (req, res) => {
 
     if (playerID === '') {
         log.warn(
-            `Tried to add player without playerID. ${JSON.stringify(req.body)}`
+            `Tried to add player without playerID.`, req.body
         );
         res.status(409).json({
             msg: `No player id present in body to add to game(${game.getID()}).`,
@@ -58,7 +58,7 @@ router.post('/startGame', (req, res) => {
 
     if (gameID === '') {
         log.warn(
-            `Tried to start game without gameID. ${JSON.stringify(req.body)}`
+            `Tried to start game without gameID.`, req.body
         );
         res.status(409).json({
             msg: 'No game id present in body.',
@@ -69,7 +69,7 @@ router.post('/startGame', (req, res) => {
 
     if (playerID === '') {
         log.warn(
-            `Tried to start game without playerID. ${JSON.stringify(req.body)}`
+            `Tried to start game without playerID.`, req.body
         );
         res.status(409).json({
             msg: `No player id present in body to add to game(${game.getID()}).`,

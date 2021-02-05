@@ -82,7 +82,9 @@ router.post('/startGame', (req, res) => {
         log.info(`Game (${game.getID()}) started.`);
         res.status(200).json({ msg: `Game (${game.getID()}) started.` });
     } else {
-        log.warn(`Non leader player (${playerID}) tried to start game (${game.getID()}).`);
+        log.warn(
+            `Non leader player (${playerID}) tried to start game (${game.getID()}).`
+        );
         res.status(401).json({
             msg: `Error: Player (${playerID}) is not leader of game (${game.getID()}).`,
         });

@@ -85,7 +85,7 @@ router.post('/startGame', (req, res) => {
         log.warn(
             `Non leader player (${playerID}) tried to start game (${game.getID()}).`
         );
-        res.status(401).json({
+        res.status(403).json({
             msg: `Error: Player (${playerID}) is not leader of game (${game.getID()}).`,
         });
     }

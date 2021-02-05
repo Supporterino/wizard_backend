@@ -19,9 +19,14 @@ export class Game {
         this.roundCounter = 1;
     }
 
-    startGame(): void {
-        this.scoreboard = new Scoreboard(this.players);
-        this.startNewRound();
+    startGame(playerID: string): boolean {
+        if (this.players[0].getID() === playerID) {
+            this.scoreboard = new Scoreboard(this.players);
+            this.startNewRound();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     addPlayer(player: Player): void {

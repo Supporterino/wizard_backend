@@ -1,5 +1,7 @@
 import Router from 'express';
+import { log } from '..';
 import { Game } from '../classes/game';
+import { Player } from '../classes/player';
 import { GameController } from '../utils/gameController';
 
 export const router = Router();
@@ -20,4 +22,69 @@ router.get('/gameStatus/:id', (req, res) => {
     const game = controller.getGameById(id);
 
     res.json(JSON.stringify(game));
+});
+
+router.post('/addPlayer', (req, res) => {
+    const { gameID, playerID } = req.body;
+
+    if (gameID === '') {
+        log.warn(
+            `Tried to add player without gameID. ${JSON.stringify(req.body)}`
+        );
+        res.status(409).json({
+            msg: 'No game id present in body.',
+        });
+    }
+
+    const game = controller.getGameById(gameID);
+
+    if (playerID === '') {
+        log.warn(
+            `Tried to add player without playerID. ${JSON.stringify(req.body)}`
+        );
+        res.status(409).json({
+            msg: `No player id present in body to add to game(${game.getID()}).`,
+        });
+    }
+
+    const player: Player = new Player(playerID);
+    game.addPlayer(player);
+
+    res.status(200).json();
+});
+
+router.post('/startGame', (req, res) => {
+    const { gameID, playerID } = req.body;
+
+    if (gameID === '') {
+        log.warn(
+            `Tried to start game without gameID. ${JSON.stringify(req.body)}`
+        );
+        res.status(409).json({
+            msg: 'No game id present in body.',
+        });
+    }
+
+    const game = controller.getGameById(gameID);
+
+    if (playerID === '') {
+        log.warn(
+            `Tried to start game without playerID. ${JSON.stringify(req.body)}`
+        );
+        res.status(409).json({
+            msg: `No player id present in body to add to game(${game.getID()}).`,
+        });
+    }
+
+    const result: boolean = game.startGame(playerID);
+
+    if (result) {
+        log.info(`Game (${game.getID()}) started.`);
+        res.status(200).json({ msg: `Game (${game.getID()}) started.` });
+    } else {
+        log.warn(`Non leader player (${playerID}) tried to start game (${game.getID()}).`);
+        res.status(401).json({
+            msg: `Error: Player (${playerID}) is not leader of game (${game.getID()}).`,
+        });
+    }
 });

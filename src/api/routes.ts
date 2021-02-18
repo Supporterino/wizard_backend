@@ -82,3 +82,52 @@ router.post('/startGame', (req, res) => {
         });
     }
 });
+
+router.post('/prediction', (req, res) => {
+    const { playerID, gameID, input } = req.body;
+
+    if (gameID === '') {
+        log.warn(`Tried to give prediction without gameID.`, req.body);
+        res.status(409).json({
+            msg: 'No game id present in body.',
+        });
+    }
+
+    const game = controller.getGameById(gameID);
+
+    if (playerID === '') {
+        log.warn(`Tried to give prediction without playerID.`, req.body);
+        res.status(409).json({
+            msg: `No player id present to give prediction in game(${game.getID()}).`,
+        });
+    }
+
+    game.givePrediction(playerID, input);
+
+    res.status(200).json();
+});
+
+router.post('/play', (req, res) => {
+    const { playerID, gameID, input } = req.body;
+    const card = JSON.parse(input);
+
+    if (gameID === '') {
+        log.warn(`Tried to play a card without gameID.`, req.body);
+        res.status(409).json({
+            msg: 'No game id present in body.',
+        });
+    }
+
+    const game = controller.getGameById(gameID);
+
+    if (playerID === '') {
+        log.warn(`Tried to play a card without playerID.`, req.body);
+        res.status(409).json({
+            msg: `No player id present to play card in game(${game.getID()}).`,
+        });
+    }
+
+    game.playTurn(playerID, card);
+
+    res.status(200).json();
+});

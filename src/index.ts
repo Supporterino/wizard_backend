@@ -15,6 +15,8 @@ const app: express.Application = express();
 
 const port = 1337;
 
+app.use(cors());
+
 app.use(helmet.dnsPrefetchControl());
 app.use(helmet.expectCt());
 app.use(helmet.frameguard());
@@ -28,7 +30,11 @@ app.use(helmet.xssFilter());
 
 app.use(express.json());
 app.enable('trust proxy');
-app.use(cors());
+
+app.use((req, res, next) => {
+    log.silly(`Incomming request`, req.url);
+    next();
+})
 
 app.use('/api', router);
 

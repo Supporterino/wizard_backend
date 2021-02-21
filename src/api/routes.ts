@@ -17,11 +17,25 @@ router.get('/newGame', (req, res) => {
     });
 });
 
-router.get('/gameStatus/:id', (req, res) => {
+router.get('/getGame/:id', (req, res) => {
     const id: string = req.params.id;
     const game = controller.getGameById(id);
 
-    res.json(JSON.stringify(game));
+    res.json(game);
+});
+
+router.get('/getPlayers/:id', (req, res) => {
+    const id: string = req.params.id;
+    const game = controller.getGameById(id);
+
+    res.json(game.getPlayers());
+});
+
+router.get('/getState/:id', (req, res) => {
+    const id: string = req.params.id;
+    const game = controller.getGameById(id);
+
+    res.json(game.getState());
 });
 
 router.post('/addPlayer', (req, res) => {

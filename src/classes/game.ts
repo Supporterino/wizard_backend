@@ -12,15 +12,18 @@ export class Game {
     private round!: Round;
     private scoreboard!: Scoreboard;
     private activePlayer!: Player;
+    private started: boolean;
 
     constructor() {
         this.id = gameID();
         this.players = new Array<Player>();
         this.roundCounter = 1;
+        this.started = false;
     }
 
     startGame(playerID: string): boolean {
         if (this.players[0].getID() === playerID) {
+            this.started = true;
             this.scoreboard = new Scoreboard(this.players);
             this.startNewRound();
             return true;
@@ -101,6 +104,14 @@ export class Game {
 
     getID(): string {
         return this.id;
+    }
+    
+    getPlayers(): Array<Player> {
+        return this.players;
+    }
+
+    getState(): boolean {
+        return this.started;
     }
 
     toString(): string {

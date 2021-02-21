@@ -34,7 +34,7 @@ app.enable('trust proxy');
 app.use((req, res, next) => {
     log.silly(`Incomming request`, req.url);
     next();
-})
+});
 
 app.use('/api', router);
 

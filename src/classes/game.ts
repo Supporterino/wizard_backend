@@ -105,7 +105,7 @@ export class Game {
     getID(): string {
         return this.id;
     }
-    
+
     getPlayers(): Array<Player> {
         return this.players;
     }

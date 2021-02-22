@@ -4,6 +4,7 @@ import { Player } from './player';
 import { Round } from './round';
 import { Scoreboard } from './scoreboard';
 import { log } from '../index';
+import { GameState } from './GameState';
 
 export class Game {
     private id: string;
@@ -12,18 +13,18 @@ export class Game {
     private round!: Round;
     private scoreboard!: Scoreboard;
     private activePlayer!: Player;
-    private started: boolean;
+    private state: GameState;
 
     constructor() {
         this.id = gameID();
         this.players = new Array<Player>();
         this.roundCounter = 1;
-        this.started = false;
+        this.state = GameState.Joining;
     }
 
     startGame(playerID: string): boolean {
         if (this.players[0].getID() === playerID) {
-            this.started = true;
+            this.state = GameState.Predicting;
             this.scoreboard = new Scoreboard(this.players);
             this.startNewRound();
             return true;
@@ -110,8 +111,8 @@ export class Game {
         return this.players;
     }
 
-    getState(): boolean {
-        return this.started;
+    getState(): GameState {
+        return this.state;
     }
 
     toString(): string {

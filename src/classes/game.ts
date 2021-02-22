@@ -115,6 +115,19 @@ export class Game {
         return this.state;
     }
 
+    getRC(): number {
+        return this.roundCounter;
+    }
+
+    getActivePlayer(): Player {
+        return this.activePlayer;
+    }
+
+    getHand(playerID: string): Array<Card> {
+        const out = this.players.filter((e) => e.getID() === playerID);
+        return out[0].getHand();
+    }
+
     toString(): string {
         let output = `Game{id: ${this.id}, \n`;
         output += `counter: ${this.roundCounter}, \n`;

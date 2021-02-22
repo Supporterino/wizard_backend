@@ -38,6 +38,27 @@ router.get('/getState/:id', (req, res) => {
     res.json(game.getState());
 });
 
+router.get('/getRoundCounter/:id', (req, res) => {
+    const id: string = req.params.id;
+    const game = controller.getGameById(id);
+
+    res.json(game.getRC());
+});
+
+router.get('/getActivePlayer/:id', (req, res) => {
+    const id: string = req.params.id;
+    const game = controller.getGameById(id);
+
+    res.json(game.getActivePlayer().getID());
+});
+
+router.post('/getHand', (req, res) => {
+    const { gameID, playerID } = req.body;
+    const game = controller.getGameById(gameID);
+
+    res.json(game.getHand(playerID));
+});
+
 router.post('/addPlayer', (req, res) => {
     const { gameID, playerID } = req.body;
 

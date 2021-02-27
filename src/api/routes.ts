@@ -5,7 +5,7 @@ import { Player } from '../classes/player';
 import { GameController } from '../utils/gameController';
 
 export const router = Router();
-const controller: GameController = new GameController();
+export const controller: GameController = new GameController();
 
 router.get('/newGame', (req, res) => {
     const newGame: Game = new Game();
@@ -59,110 +59,110 @@ router.post('/getHand', (req, res) => {
     res.json(game.getHand(playerID));
 });
 
-router.post('/addPlayer', (req, res) => {
-    const { gameID, playerID } = req.body;
+// router.post('/addPlayer', (req, res) => {
+//     const { gameID, playerID } = req.body;
 
-    if (gameID === '') {
-        log.warn(`Tried to add player without gameID.`, req.body);
-        res.status(409).json({
-            msg: 'No game id present in body.',
-        });
-    }
+//     if (gameID === '') {
+//         log.warn(`Tried to add player without gameID.`, req.body);
+//         res.status(409).json({
+//             msg: 'No game id present in body.',
+//         });
+//     }
 
-    const game = controller.getGameById(gameID);
+//     const game = controller.getGameById(gameID);
 
-    if (playerID === '') {
-        log.warn(`Tried to add player without playerID.`, req.body);
-        res.status(409).json({
-            msg: `No player id present in body to add to game(${game.getID()}).`,
-        });
-    }
+//     if (playerID === '') {
+//         log.warn(`Tried to add player without playerID.`, req.body);
+//         res.status(409).json({
+//             msg: `No player id present in body to add to game(${game.getID()}).`,
+//         });
+//     }
 
-    const player: Player = new Player(playerID);
-    game.addPlayer(player);
+//     const player: Player = new Player(playerID);
+//     game.addPlayer(player);
 
-    res.status(200).json();
-});
+//     res.status(200).json();
+// });
 
-router.post('/startGame', (req, res) => {
-    const { gameID, playerID } = req.body;
+// router.post('/startGame', (req, res) => {
+//     const { gameID, playerID } = req.body;
 
-    if (gameID === '') {
-        log.warn(`Tried to start game without gameID.`, req.body);
-        res.status(409).json({
-            msg: 'No game id present in body.',
-        });
-    }
+//     if (gameID === '') {
+//         log.warn(`Tried to start game without gameID.`, req.body);
+//         res.status(409).json({
+//             msg: 'No game id present in body.',
+//         });
+//     }
 
-    const game = controller.getGameById(gameID);
+//     const game = controller.getGameById(gameID);
 
-    if (playerID === '') {
-        log.warn(`Tried to start game without playerID.`, req.body);
-        res.status(409).json({
-            msg: `No player id present in body to add to game(${game.getID()}).`,
-        });
-    }
+//     if (playerID === '') {
+//         log.warn(`Tried to start game without playerID.`, req.body);
+//         res.status(409).json({
+//             msg: `No player id present in body to add to game(${game.getID()}).`,
+//         });
+//     }
 
-    const result: boolean = game.startGame(playerID);
+//     const result: boolean = game.startGame(playerID);
 
-    if (result) {
-        log.info(`Game (${game.getID()}) started.`);
-        res.status(200).json({ msg: `Game (${game.getID()}) started.` });
-    } else {
-        log.warn(
-            `Non leader player (${playerID}) tried to start game (${game.getID()}).`
-        );
-        res.status(403).json({
-            msg: `Error: Player (${playerID}) is not leader of game (${game.getID()}).`,
-        });
-    }
-});
+//     if (result) {
+//         log.info(`Game (${game.getID()}) started.`);
+//         res.status(200).json({ msg: `Game (${game.getID()}) started.` });
+//     } else {
+//         log.warn(
+//             `Non leader player (${playerID}) tried to start game (${game.getID()}).`
+//         );
+//         res.status(403).json({
+//             msg: `Error: Player (${playerID}) is not leader of game (${game.getID()}).`,
+//         });
+//     }
+// });
 
-router.post('/prediction', (req, res) => {
-    const { playerID, gameID, input } = req.body;
+// router.post('/prediction', (req, res) => {
+//     const { playerID, gameID, input } = req.body;
 
-    if (gameID === '') {
-        log.warn(`Tried to give prediction without gameID.`, req.body);
-        res.status(409).json({
-            msg: 'No game id present in body.',
-        });
-    }
+//     if (gameID === '') {
+//         log.warn(`Tried to give prediction without gameID.`, req.body);
+//         res.status(409).json({
+//             msg: 'No game id present in body.',
+//         });
+//     }
 
-    const game = controller.getGameById(gameID);
+//     const game = controller.getGameById(gameID);
 
-    if (playerID === '') {
-        log.warn(`Tried to give prediction without playerID.`, req.body);
-        res.status(409).json({
-            msg: `No player id present to give prediction in game(${game.getID()}).`,
-        });
-    }
+//     if (playerID === '') {
+//         log.warn(`Tried to give prediction without playerID.`, req.body);
+//         res.status(409).json({
+//             msg: `No player id present to give prediction in game(${game.getID()}).`,
+//         });
+//     }
 
-    game.givePrediction(playerID, input);
+//     game.givePrediction(playerID, input);
 
-    res.status(200).json();
-});
+//     res.status(200).json();
+// });
 
-router.post('/play', (req, res) => {
-    const { playerID, gameID, input } = req.body;
-    const card = JSON.parse(input);
+// router.post('/play', (req, res) => {
+//     const { playerID, gameID, input } = req.body;
+//     const card = JSON.parse(input);
 
-    if (gameID === '') {
-        log.warn(`Tried to play a card without gameID.`, req.body);
-        res.status(409).json({
-            msg: 'No game id present in body.',
-        });
-    }
+//     if (gameID === '') {
+//         log.warn(`Tried to play a card without gameID.`, req.body);
+//         res.status(409).json({
+//             msg: 'No game id present in body.',
+//         });
+//     }
 
-    const game = controller.getGameById(gameID);
+//     const game = controller.getGameById(gameID);
 
-    if (playerID === '') {
-        log.warn(`Tried to play a card without playerID.`, req.body);
-        res.status(409).json({
-            msg: `No player id present to play card in game(${game.getID()}).`,
-        });
-    }
+//     if (playerID === '') {
+//         log.warn(`Tried to play a card without playerID.`, req.body);
+//         res.status(409).json({
+//             msg: `No player id present to play card in game(${game.getID()}).`,
+//         });
+//     }
 
-    game.playTurn(playerID, card);
+//     game.playTurn(playerID, card);
 
-    res.status(200).json();
-});
+//     res.status(200).json();
+// });

@@ -9,11 +9,21 @@ export const log: Logger = new Logger({
 import helmet from 'helmet';
 import cors from 'cors';
 import express from 'express';
-import { router } from './api/routes';
+import { router, controller } from './api/routes';
+import { Server, Socket } from 'socket.io';
+import { createServer } from 'http';
+import { Player } from './classes/player';
 
 const app: express.Application = express();
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+    },
+});
 
-const port = 1337;
+const port = process.env.PORT || 1337;
 
 app.use(cors());
 
@@ -47,6 +57,37 @@ app.use('/', (req, res) => {
     });
 });
 
-app.listen(port, () => {
+const gameNamespaces = io.of(/\w{5}/gm);
+
+gameNamespaces.on('connection', (socket: Socket) => {
+    const gameSocket = socket.nsp;
+    log.debug(`Socket ${gameSocket.name} established.`);
+
+    socket.on('user-add', (playerID) => {
+        const game = controller.getGameById(gameSocket.name.substring(1));
+
+        if (playerID === '') {
+            gameSocket.emit('error', {
+                msg: 'Tried to add user without ID.',
+            });
+        }
+
+        const player: Player = new Player(playerID);
+        game.addPlayer(player);
+
+        gameSocket.emit('user-added', game.getPlayers());
+    });
+
+    socket.on('start-game', (playerID) => {
+        log.debug(`Starting game ${gameSocket.name}`);
+        const game = controller.getGameById(gameSocket.name.substring(1));
+
+        game.startGame(playerID);
+
+        gameSocket.emit('game-started');
+    });
+});
+
+server.listen(port, () => {
     log.info(`Server started. Listening on port ${port}`);
 });

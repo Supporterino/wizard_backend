@@ -119,6 +119,10 @@ export class Game {
         return this.roundCounter;
     }
 
+    getScoreboard(): Scoreboard {
+        return this.scoreboard;
+    }
+
     getActivePlayer(): Player {
         return this.activePlayer;
     }

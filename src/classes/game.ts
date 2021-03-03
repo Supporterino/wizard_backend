@@ -5,7 +5,6 @@ import { Round } from './round';
 import { Scoreboard } from './scoreboard';
 import { log } from '../index';
 import { GameState } from './GameState';
-import { stat } from 'fs';
 
 export class Game {
     private id: string;

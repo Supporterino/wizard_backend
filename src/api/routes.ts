@@ -63,10 +63,7 @@ router.get('/getScoreboard/:id', (req, res) => {
     const id: string = req.params.id;
     const game = controller.getGameById(id);
 
-    const temp = game.getScoreboard();
-    log.silly(temp);
-    res.json(temp);
-    //res.json(game.getScoreboard());
+    res.json(game.getScoreboard());
 });
 
 // router.post('/addPlayer', (req, res) => {

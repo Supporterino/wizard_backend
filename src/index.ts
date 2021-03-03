@@ -13,6 +13,7 @@ import { router, controller } from './api/routes';
 import { Server, Socket } from 'socket.io';
 import { createServer } from 'http';
 import { Player } from './classes/player';
+import { Card } from './classes/card';
 
 const app: express.Application = express();
 const server = createServer(app);
@@ -85,6 +86,28 @@ gameNamespaces.on('connection', (socket: Socket) => {
         game.startGame(playerID);
 
         gameSocket.emit('game-started');
+    });
+
+    socket.on('prediction', (value) => {
+        const game = controller.getGameById(gameSocket.name.substring(1));
+
+        game.givePrediction(value.id, value.val);
+
+        gameSocket.emit('new-active-player', game.getActivePlayer().getID());
+        gameSocket.emit('scoreboard-update', game.getScoreboard());
+        gameSocket.emit('state-update', game.getState());
+        gameSocket.emit('rc-update', game.getRC());
+    });
+
+    socket.on('play-card', (value) => {
+        const game = controller.getGameById(gameSocket.name.substring(1));
+
+        game.playTurn(value.id, new Card(value.card.color, value.card.char));
+
+        gameSocket.emit('new-active-player', game.getActivePlayer().getID());
+        gameSocket.emit('scoreboard-update', game.getScoreboard());
+        gameSocket.emit('state-update', game.getState());
+        gameSocket.emit('rc-update', game.getRC());
     });
 });
 

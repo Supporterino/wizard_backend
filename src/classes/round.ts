@@ -23,12 +23,12 @@ export class Round {
         this.pile = new Array<Card>();
     }
 
-    next(): Player {
-        if (this.pointer < this.players.length - 1) {
-            return this.players[this.pointer++];
+    next(): PlayerReturn {
+        if (this.pointer < this.players.length) {
+            return { player: this.players[this.pointer++], break: false }; //return this.players[this.pointer++];
         } else {
             this.pointer = 0;
-            return this.players[this.players.length - 1];
+            return { player: this.players[this.pointer++], break: true };
         }
     }
 
@@ -60,9 +60,11 @@ export class Round {
     }
 
     playTurn(playerID: string, card: Card): boolean {
+        log.silly('Active players', this.players);
         const toPlay = this.players
             .filter((e) => e.getID() == playerID)[0]
             .playCard(card);
+        log.silly(`Adding card to pile from ${playerID}`, toPlay);
         this.addCardToPile(toPlay);
 
         if (playerID == this.players[this.players.length - 1].getID()) {
@@ -125,4 +127,9 @@ export class Round {
         output += `turn: ${this.turnCounter} of ${this.turns}}`;
         return output;
     }
+}
+
+export interface PlayerReturn {
+    player: Player;
+    break: boolean;
 }

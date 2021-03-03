@@ -5,6 +5,7 @@ import { Round } from './round';
 import { Scoreboard } from './scoreboard';
 import { log } from '../index';
 import { GameState } from './GameState';
+import { stat } from 'fs';
 
 export class Game {
     private id: string;
@@ -41,13 +42,16 @@ export class Game {
     startNewRound(): void {
         this.round = new Round(this.roundCounter, this.players);
         this.round.start();
-        this.activePlayer = this.round.next();
+        this.activePlayer = this.round.next().player;
         log.debug(`Starting Round ${this.roundCounter}.`);
         log.debug(`Initial player is ${this.activePlayer.getID()}.`);
     }
 
     continue(): void {
-        this.activePlayer = this.round.next();
+        const val = this.round.next();
+        this.activePlayer = val.player;
+        if (val.break && this.state == GameState.Predicting)
+            this.state = GameState.Playing;
         log.debug(`Next player is ${this.activePlayer.getID()}.`);
     }
 

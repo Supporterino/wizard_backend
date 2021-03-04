@@ -1,0 +1,18 @@
+# Changelog
+
+## [0.1.1] - 2021-03-04
+
+### Added
+
+- Adding more Rest Routes
+
+### Changed
+
+- Adjusted some functions in the game classes
+
+## [0.1] - 2021-03-04
+
+### Added
+
+- First release of the REST API
+- Game Logic implemented as classes

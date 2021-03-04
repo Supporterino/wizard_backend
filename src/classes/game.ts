@@ -24,7 +24,6 @@ export class Game {
 
     startGame(playerID: string): boolean {
         if (this.players[0].getID() === playerID) {
-            this.state = GameState.Predicting;
             this.scoreboard = new Scoreboard(this.players);
             this.startNewRound();
             return true;
@@ -41,6 +40,7 @@ export class Game {
     startNewRound(): void {
         this.round = new Round(this.roundCounter, this.players);
         this.round.start();
+        this.state = GameState.Predicting;
         this.activePlayer = this.round.next().player;
         log.debug(`Starting Round ${this.roundCounter}.`);
         log.debug(`Initial player is ${this.activePlayer.getID()}.`);
@@ -104,6 +104,10 @@ export class Game {
 
     printScoreboard(): string {
         return this.scoreboard.toString();
+    }
+
+    getDC(): Card {
+        return this.round.getDominantColor();
     }
 
     getID(): string {

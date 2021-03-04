@@ -38,6 +38,7 @@ export class Player {
     }
 
     playCard(card: Card): Card {
+        log.silly(`Playing card (${card.toString()}) from hand:`, this.hand);
         return removeElement(this.hand, card);
     }
 

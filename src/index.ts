@@ -97,6 +97,7 @@ gameNamespaces.on('connection', (socket: Socket) => {
         gameSocket.emit('scoreboard-update', game.getScoreboard());
         gameSocket.emit('state-update', game.getState());
         gameSocket.emit('rc-update', game.getRC());
+        gameSocket.emit('dom-update', game.getDC());
     });
 
     socket.on('play-card', (value) => {
@@ -108,6 +109,7 @@ gameNamespaces.on('connection', (socket: Socket) => {
         gameSocket.emit('scoreboard-update', game.getScoreboard());
         gameSocket.emit('state-update', game.getState());
         gameSocket.emit('rc-update', game.getRC());
+        gameSocket.emit('dom-update', game.getDC());
     });
 });
 

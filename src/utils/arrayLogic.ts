@@ -1,5 +1,9 @@
-export const removeElement = (arr: Array<any>, ele: any): any => {
-    const index = arr.indexOf(ele);
+import { Card } from '../classes/card';
+
+export const removeElement = (arr: Array<Card>, ele: Card): any => {
+    const index = arr.findIndex((x) => {
+        return x.getChar() === ele.getChar() && x.getColor() === ele.getColor();
+    });
     if (index > -1) return arr.splice(index, 1)[0];
     else return undefined;
 };

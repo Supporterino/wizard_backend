@@ -66,6 +66,12 @@ router.get('/getScoreboard/:id', (req, res) => {
     res.json(game.getScoreboard());
 });
 
+router.get('/getDomColor/:id', (req, res) => {
+    const id: string = req.params.id;
+    const game = controller.getGameById(id);
+
+    res.json(game.getDC());
+});
 // router.post('/addPlayer', (req, res) => {
 //     const { gameID, playerID } = req.body;
 

@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig*.json ./
 COPY ./src ./src
+COPY ./client ./client
 
 RUN apt-get update
 RUN apt-get upgrade -y

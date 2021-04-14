@@ -40,6 +40,7 @@ app.use(helmet.referrerPolicy());
 app.use(helmet.xssFilter());
 
 app.use(express.json());
+app.use(express.static('./client'));
 app.enable('trust proxy');
 
 app.use((req, res, next) => {

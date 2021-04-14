@@ -91,10 +91,10 @@ export class Game {
         const winnerOfTurn = this.round.analyzeTurn();
         log.debug(`Winner of Turn: ${winnerOfTurn.getID()}`);
         winnerOfTurn.addHit();
-        const splitPoint = this.players.indexOf(winnerOfTurn);
-        const temp = this.players;
-        const front = temp.splice(0, splitPoint);
-        this.players = temp.concat(front);
+        // const splitPoint = this.players.indexOf(winnerOfTurn);
+        // const temp = this.players;
+        // const front = temp.splice(0, splitPoint);
+        // this.players = temp.concat(front);
         const end = this.round.startNewTurn();
         if (end) {
             this.scoreboard.analyzeRound(this.roundCounter);

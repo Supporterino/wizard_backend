@@ -15,6 +15,7 @@ build:
   script:
     - echo $DOCKER_PW | docker login --username supporterino --password-stdin
     - docker build -t supporterino/wizard:ci .
+    - docker push supporterino/wizard:ci
 test:
   image: node:latest
 

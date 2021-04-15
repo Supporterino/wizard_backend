@@ -99,9 +99,10 @@ export class Game {
     }
 
     moveByX(arr: Array<Player>, point: number) {
-        const front = arr.splice(0, point);
+        let temp = arr;
+        const front = temp.splice(0, point);
         log.debug(`Cut part`, front);
-        return arr.concat(front);
+        return temp.concat(front);
     }
 
     endTurn(): void {

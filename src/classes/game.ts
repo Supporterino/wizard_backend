@@ -41,8 +41,8 @@ export class Game {
     }
 
     startNewRound(): void {
-        this.round = new Round(this.roundCounter, this.startingOrder);
         this.players = this.startingOrder;
+        this.round = new Round(this.roundCounter, this.players);
         this.startingOrder = this.moveByX(this.startingOrder, 1);
         this.round.start();
         this.state = GameState.Predicting;
@@ -63,7 +63,7 @@ export class Game {
         log.debug(`${playerID} setting prediction to ${val}.`);
         if (playerID === this.activePlayer.getID()) {
             this.scoreboard.receivePrediction(
-                this.players.indexOf(this.activePlayer),
+                this.activePlayer,
                 this.roundCounter,
                 val
             );

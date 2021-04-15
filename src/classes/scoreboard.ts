@@ -20,8 +20,8 @@ export class Scoreboard {
         }
     }
 
-    receivePrediction(index: number, rc: number, val: number): void {
-        this.board[index][rc - 1].setTarget(val);
+    receivePrediction(activePlayer: Player, rc: number, val: number): void {
+        this.board[this.players.indexOf(activePlayer)][rc - 1].setTarget(val);
     }
 
     analyzeRound(rc: number): void {

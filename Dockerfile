@@ -18,6 +18,8 @@ RUN npm run build
 
 RUN rm -R /app/node_modules
 RUN rm -R /app/src
+RUN rm -R /var/cache/apt
+RUN rm -R /var/lib/apt/lists
 
 ENV NODE_ENV=production
 

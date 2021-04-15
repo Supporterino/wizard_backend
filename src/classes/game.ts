@@ -9,7 +9,7 @@ import { GameState } from './GameState';
 export class Game {
     private id: string;
     private players: Array<Player>;
-    private startingOrder: Array<Player>;
+    private startingOrder!: Array<Player>;
     private roundCounter: number;
     private round!: Round;
     private scoreboard!: Scoreboard;

@@ -86,18 +86,23 @@ export class Game {
         }
     }
 
+    updatePlayersAfterTurn(winningPlayer: Player): void {
+        const splitPoint = this.players.indexOf(winningPlayer);
+        log.debug(`Splitpoint: ${splitPoint}`);
+        const tempPlayers = this.players;
+        const front = tempPlayers.splice(0, splitPoint);
+        log.debug(`Cut part`, front);
+        this.players = tempPlayers.concat(front);
+        log.debug(`New players`, this.players);
+        this.round.updatePlayer(this.players);
+    }
+
     endTurn(): void {
         log.debug(`Turn end.`);
         const winnerOfTurn = this.round.analyzeTurn();
         log.debug(`Winner of Turn: ${winnerOfTurn.getID()}`);
         winnerOfTurn.addHit();
-        const splitPoint = this.players.indexOf(winnerOfTurn);
-        log.debug(`Splitpoint: ${splitPoint}`);
-        const temp = this.players;
-        const front = temp.splice(0, splitPoint);
-        log.debug(`Cut part`, front);
-        this.players = temp.concat(front);
-        log.debug(`New players`, this.players);
+        this.updatePlayersAfterTurn(winnerOfTurn);
 
         const end = this.round.startNewTurn();
         if (end) {

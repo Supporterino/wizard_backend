@@ -117,6 +117,10 @@ export class Round {
         this.pile.push(card);
     }
 
+    updatePlayer(newPlayers: Array<Player>): void {
+        this.players = newPlayers;
+    }
+
     getDominantColor(): Card {
         return this.dominantColor;
     }

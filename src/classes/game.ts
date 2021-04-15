@@ -9,6 +9,7 @@ import { GameState } from './GameState';
 export class Game {
     private id: string;
     private players: Array<Player>;
+    private startingOrder: Array<Player>;
     private roundCounter: number;
     private round!: Round;
     private scoreboard!: Scoreboard;
@@ -19,12 +20,14 @@ export class Game {
         this.id = gameID();
         this.players = new Array<Player>();
         this.roundCounter = 1;
+
         this.state = GameState.Joining;
     }
 
     startGame(playerID: string): boolean {
         if (this.players[0].getID() === playerID) {
             this.scoreboard = new Scoreboard(this.players);
+            this.startingOrder = this.players;
             this.startNewRound();
             return true;
         } else {
@@ -38,7 +41,9 @@ export class Game {
     }
 
     startNewRound(): void {
-        this.round = new Round(this.roundCounter, this.players);
+        this.round = new Round(this.roundCounter, this.startingOrder);
+        this.players = this.startingOrder;
+        this.startingOrder = this.moveByX(this.startingOrder, 1);
         this.round.start();
         this.state = GameState.Predicting;
         this.activePlayer = this.round.next().player;
@@ -89,12 +94,14 @@ export class Game {
     updatePlayersAfterTurn(winningPlayer: Player): void {
         const splitPoint = this.players.indexOf(winningPlayer);
         log.debug(`Splitpoint: ${splitPoint}`);
-        const tempPlayers = this.players;
-        const front = tempPlayers.splice(0, splitPoint);
-        log.debug(`Cut part`, front);
-        this.players = tempPlayers.concat(front);
-        log.debug(`New players`, this.players);
+        this.players = this.moveByX(this.players, splitPoint);
         this.round.updatePlayer(this.players);
+    }
+
+    moveByX(arr: Array<Player>, point: number) {
+        const front = arr.splice(0, point);
+        log.debug(`Cut part`, front);
+        return arr.concat(front);
     }
 
     endTurn(): void {

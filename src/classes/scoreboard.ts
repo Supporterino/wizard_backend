@@ -1,3 +1,4 @@
+import { log } from '..';
 import { Player } from './player';
 
 export class Scoreboard {

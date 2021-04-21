@@ -9,7 +9,7 @@ import { GameState } from './GameState';
 export class Game {
     private id: string;
     private players: Array<Player>;
-    //private startingOrder!: Array<Player>;
+    // private startingOrder!: Array<Player>;
     private roundCounter: number;
     private round!: Round;
     private scoreboard!: Scoreboard;
@@ -20,14 +20,13 @@ export class Game {
         this.id = gameID();
         this.players = new Array<Player>();
         this.roundCounter = 1;
-
         this.state = GameState.Joining;
     }
 
     startGame(playerID: string): boolean {
         if (this.players[0].getID() === playerID) {
+            // this.startingOrder = this.players;
             this.scoreboard = new Scoreboard(this.players);
-            //this.startingOrder = this.players;
             this.startNewRound();
             return true;
         } else {
@@ -35,15 +34,15 @@ export class Game {
         }
     }
 
-    addPlayer(player: Player): void {
-        log.debug(`Adding ${player.getID()} to game ${this.id}.`);
-        this.players.push(player);
+    addPlayer(playerID: string): void {
+        log.debug(`Adding ${playerID} to game ${this.id}.`);
+        this.players.push(new Player(playerID));
     }
 
     startNewRound(): void {
-        //this.players = this.startingOrder;
+        // this.startingOrder = this.moveByX(this.startingOrder, 1);
+        // this.players = this.startingOrder; //[...this.startingOrder];
         this.round = new Round(this.roundCounter, this.players);
-        //this.startingOrder = this.moveByX(this.startingOrder, 1);
         this.round.start();
         this.state = GameState.Predicting;
         this.activePlayer = this.round.next().player;

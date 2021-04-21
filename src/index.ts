@@ -74,8 +74,7 @@ gameNamespaces.on('connection', (socket: Socket) => {
             });
         }
 
-        const player: Player = new Player(playerID);
-        game.addPlayer(player);
+        game.addPlayer(playerID);
 
         gameSocket.emit('user-added', game.getPlayers());
     });

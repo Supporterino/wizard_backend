@@ -159,6 +159,10 @@ export class Game {
         return out[0].getHand();
     }
 
+    getPile(): Array<Card> {
+        return this.round.getPile();
+    }
+
     toString(): string {
         let output = `Game{id: ${this.id}, \n`;
         output += `counter: ${this.roundCounter}, \n`;

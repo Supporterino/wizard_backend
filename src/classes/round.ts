@@ -125,6 +125,10 @@ export class Round {
         return this.dominantColor;
     }
 
+    getPile(): Array<Card> {
+        return this.pile;
+    }
+
     toString(): string {
         let output = 'Round{pile:[ \n';
         for (const card of this.pile) {

@@ -110,6 +110,7 @@ gameNamespaces.on('connection', (socket: Socket) => {
         gameSocket.emit('state-update', game.getState());
         gameSocket.emit('rc-update', game.getRC());
         gameSocket.emit('dom-update', game.getDC());
+        gameSocket.emit('pile-update', game.getPile());
     });
 });
 

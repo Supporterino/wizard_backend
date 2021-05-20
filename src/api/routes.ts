@@ -45,6 +45,13 @@ router.get('/getRoundCounter/:id', (req, res) => {
     res.json(game.getRC());
 });
 
+router.get('/getMaxRoundCounter/:id', (req, res) => {
+    const id: string = req.params.id;
+    const game = controller.getGameById(id);
+
+    res.json(game.getMaxRC());
+});
+
 router.get('/getActivePlayer/:id', (req, res) => {
     const id: string = req.params.id;
     const game = controller.getGameById(id);

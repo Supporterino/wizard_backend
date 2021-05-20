@@ -74,19 +74,22 @@ export class Game {
         }
     }
 
-    playTurn(playerID: string, card: Card): void {
+    playTurn(playerID: string, card: Card): PlayResult | undefined {
         log.debug(`${playerID} is playing card: ${card.toString()}`);
         if (playerID === this.activePlayer.getID()) {
             const end = this.round.playTurn(playerID, card);
             if (end) {
-                this.endTurn();
+                const out = this.endTurn();
+                return out;
             } else {
                 this.continue();
+                return { turnEnd: false, roundEnd: false, winner: 'none' };
             }
         } else {
             log.debug(
                 `No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}`
             );
+            return undefined;
         }
     }
 
@@ -98,13 +101,13 @@ export class Game {
     }
 
     moveByX(arr: Array<Player>, point: number) {
-        let temp = arr;
+        const temp = arr;
         const front = temp.splice(0, point);
         log.debug(`Cut part`, front);
         return temp.concat(front);
     }
 
-    endTurn(): void {
+    endTurn(): PlayResult {
         log.debug(`Turn end.`);
         const winnerOfTurn = this.round.analyzeTurn();
         log.debug(`Winner of Turn: ${winnerOfTurn.getID()}`);
@@ -117,8 +120,18 @@ export class Game {
             log.debug(`Round ${this.roundCounter} is over.`);
             this.roundCounter++;
             this.startNewRound();
+            return {
+                turnEnd: true,
+                roundEnd: true,
+                winner: winnerOfTurn.getID(),
+            };
         } else {
             this.continue();
+            return {
+                turnEnd: true,
+                roundEnd: false,
+                winner: winnerOfTurn.getID(),
+            };
         }
     }
 
@@ -144,6 +157,10 @@ export class Game {
 
     getRC(): number {
         return this.roundCounter;
+    }
+
+    getMaxRC(): number {
+        return this.scoreboard.getMaxRoundNumber();
     }
 
     getScoreboard(): Scoreboard {
@@ -174,4 +191,10 @@ export class Game {
         output += `]}`;
         return output;
     }
+}
+
+export interface PlayResult {
+    turnEnd: boolean;
+    roundEnd: boolean;
+    winner: string;
 }

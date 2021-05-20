@@ -103,7 +103,16 @@ gameNamespaces.on('connection', (socket: Socket) => {
     socket.on('play-card', (value) => {
         const game = controller.getGameById(gameSocket.name.substring(1));
 
-        game.playTurn(value.id, new Card(value.card.color, value.card.char));
+        const result = game.playTurn(
+            value.id,
+            new Card(value.card.color, value.card.char)
+        );
+
+        if (result && result.turnEnd) {
+            if (result.roundEnd)
+                gameSocket.emit('roundEnd-event', result.winner);
+            else gameSocket.emit('turnEnd-event', result.winner);
+        }
 
         gameSocket.emit('new-active-player', game.getActivePlayer().getID());
         gameSocket.emit('scoreboard-update', game.getScoreboard());

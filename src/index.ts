@@ -12,7 +12,6 @@ import express from 'express';
 import { router, controller } from './api/routes';
 import { Server, Socket } from 'socket.io';
 import { createServer } from 'http';
-import { Player } from './classes/player';
 import { Card } from './classes/card';
 
 const app: express.Application = express();
@@ -44,7 +43,7 @@ app.use(express.static('./client'));
 app.enable('trust proxy');
 
 app.use((req, res, next) => {
-    log.silly(`Incomming request`, req.url);
+    log.silly(`[General Reuqest Catcher] Incomming:`, req.url);
     next();
 });
 
@@ -66,6 +65,7 @@ gameNamespaces.on('connection', (socket: Socket) => {
     log.debug(`Socket ${gameSocket.name} established.`);
 
     socket.on('user-add', (playerID) => {
+        log.debug(`[Socket <-] User ADD Request for ${playerID}`);
         const game = controller.getGameById(gameSocket.name.substring(1));
 
         if (playerID === '') {
@@ -76,23 +76,27 @@ gameNamespaces.on('connection', (socket: Socket) => {
 
         game.addPlayer(playerID);
 
+        log.debug(`[Socket ->] Inform Lobby about new Player(${playerID})`);
         gameSocket.emit('user-added', game.getPlayers());
     });
 
     socket.on('start-game', (playerID) => {
-        log.debug(`Starting game ${gameSocket.name}`);
+        log.debug(`[Socket <-] Starting game ${gameSocket.name}`);
         const game = controller.getGameById(gameSocket.name.substring(1));
 
         game.startGame(playerID);
 
+        log.debug(`[Socket ->] Game(${game.getID()}) started.`);
         gameSocket.emit('game-started');
     });
 
     socket.on('prediction', (value) => {
+        log.debug(`[Socket <-] Receiving prediction for ${value.id}.`);
         const game = controller.getGameById(gameSocket.name.substring(1));
 
         game.givePrediction(value.id, value.val);
 
+        log.debug(`[Socket ->] Inform players about game advancement.`);
         gameSocket.emit('new-active-player', game.getActivePlayer().getID());
         gameSocket.emit('scoreboard-update', game.getScoreboard());
         gameSocket.emit('state-update', game.getState());
@@ -101,6 +105,7 @@ gameNamespaces.on('connection', (socket: Socket) => {
     });
 
     socket.on('play-card', (value) => {
+        log.debug(`[Socket <-] Receiving card play for ${value.id}.`);
         const game = controller.getGameById(gameSocket.name.substring(1));
 
         const result = game.playTurn(
@@ -109,11 +114,16 @@ gameNamespaces.on('connection', (socket: Socket) => {
         );
 
         if (result && result.turnEnd) {
-            if (result.roundEnd)
+            if (result.roundEnd) {
+                log.debug(`[Socket ->] Inform players about round end.`);
                 gameSocket.emit('roundEnd-event', result.winner);
-            else gameSocket.emit('turnEnd-event', result.winner);
+            } else {
+                log.debug(`[Socket ->] Inform players about turn end.`);
+                gameSocket.emit('turnEnd-event', result.winner);
+            }
         }
 
+        log.debug(`[Socket ->] Inform players about game advancement.`);
         gameSocket.emit('new-active-player', game.getActivePlayer().getID());
         gameSocket.emit('scoreboard-update', game.getScoreboard());
         gameSocket.emit('state-update', game.getState());
@@ -124,5 +134,5 @@ gameNamespaces.on('connection', (socket: Socket) => {
 });
 
 server.listen(port, () => {
-    log.info(`Server started. Listening on port ${port}`);
+    log.info(`Server started. Listening on port ${port}.`);
 });

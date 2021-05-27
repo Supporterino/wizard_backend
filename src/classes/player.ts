@@ -42,7 +42,13 @@ export class Player {
 
     playCard(card: Card): Card {
         log.debug(`[Player] Playing ${card.toString()} from hand.`);
-        return removeElement(this.hand, card);
+        const out = removeElement(this.hand, card);
+        if (out) {
+            return out;
+        } else {
+            log.warn(`[Player] No card to play retrieved from hand`);
+            return new Card('', '');
+        }
     }
 
     getID(): string {

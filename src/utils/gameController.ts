@@ -9,12 +9,12 @@ export class GameController {
     constructor() {
         this.id = controllerID();
         this.games = new Array<Game>();
-        log.info(`GameController (${this.id}) created.`);
+        log.info(`[GameController] (${this.id}) created.`);
     }
 
     addGame(val: Game): void {
         const num = this.games.push(val);
-        log.info(`Game (${val.getID()}) added to controller. Total games: ${num}.`);
+        log.info(`[GameController] (${val.getID()}) added to controller. Total games: ${num}.`);
     }
 
     getGameById(id: string): Game {

@@ -1,6 +1,6 @@
 import { Card } from '../classes/card';
 
-export const removeElement = (arr: Array<Card>, ele: Card): any => {
+export const removeElement = (arr: Array<Card>, ele: Card): Card | undefined => {
     const index = arr.findIndex((x) => {
         return x.getChar() === ele.getChar() && x.getColor() === ele.getColor();
     });

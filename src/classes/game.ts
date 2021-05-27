@@ -9,7 +9,6 @@ import { GameState } from './GameState';
 export class Game {
     private id: string;
     private players: Array<Player>;
-    // private startingOrder!: Array<Player>;
     private roundCounter: number;
     private round!: Round;
     private scoreboard!: Scoreboard;
@@ -25,57 +24,53 @@ export class Game {
 
     startGame(playerID: string): boolean {
         if (this.players[0].getID() === playerID) {
-            // this.startingOrder = this.players;
+            log.info(`[Game ${this.id}] Starting.`);
             this.scoreboard = new Scoreboard(this.players);
             this.startNewRound();
             return true;
         } else {
+            log.warn(`[Game ${this.id}] Player ${playerID} tired to start but isn't the host.`);
             return false;
         }
     }
 
     addPlayer(playerID: string): void {
-        log.debug(`Adding ${playerID} to game ${this.id}.`);
+        log.debug(`[Game ${this.id}] Adding ${playerID}.`);
         this.players.push(new Player(playerID));
     }
 
     startNewRound(): void {
-        // this.startingOrder = this.moveByX(this.startingOrder, 1);
-        // this.players = this.startingOrder; //[...this.startingOrder];
         this.round = new Round(this.roundCounter, this.players);
         this.round.start();
         this.state = GameState.Predicting;
         this.activePlayer = this.round.next().player;
-        log.debug(`Starting Round ${this.roundCounter}.`);
-        log.debug(`Initial player is ${this.activePlayer.getID()}.`);
+        log.info(`[Game ${this.id}] Starting Round ${this.roundCounter}.`);
+        log.silly(`[Game ${this.id}] Initial player is ${this.activePlayer.getID()}.`);
     }
 
     continue(): void {
-        const val = this.round.next();
-        this.activePlayer = val.player;
-        if (val.break && this.state == GameState.Predicting)
+        const returnVal = this.round.next();
+        this.activePlayer = returnVal.player;
+        if (returnVal.break && this.state == GameState.Predicting) {
             this.state = GameState.Playing;
-        log.debug(`Next player is ${this.activePlayer.getID()}.`);
+            log.debug(`[Game ${this.id}] Switching GameState to Playing.`);
+        }
+        log.silly(`[Game ${this.id}] Next player is ${this.activePlayer.getID()}.`);
     }
 
     givePrediction(playerID: string, val: number): void {
-        log.debug(`${playerID} setting prediction to ${val}.`);
+        log.debug(`[Game ${this.id}] Player (${playerID}) setting prediction to ${val}.`);
         if (playerID === this.activePlayer.getID()) {
-            this.scoreboard.receivePrediction(
-                this.activePlayer,
-                this.roundCounter,
-                val
-            );
+            this.scoreboard.receivePrediction(this.activePlayer, this.roundCounter, val);
             this.continue();
         } else {
-            log.warn(
-                `No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}.`
-            );
+            log.warn(`[Game ${this.id}] No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}.`);
         }
     }
 
     playTurn(playerID: string, card: Card): PlayResult | undefined {
-        log.debug(`${playerID} is playing card: ${card.toString()}`);
+        log.debug(`[Game ${this.id}] ${playerID} is playing a card.`);
+        log.silly(`[Game ${this.id}] ${playerID} is playing this card:`, card);
         if (playerID === this.activePlayer.getID()) {
             const end = this.round.playTurn(playerID, card);
             if (end) {
@@ -86,38 +81,39 @@ export class Game {
                 return { turnEnd: false, roundEnd: false, winner: 'none' };
             }
         } else {
-            log.debug(
-                `No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}`
-            );
+            log.warn(`[Game ${this.id}] No matching player for ID: ${playerID}. Active player is ${this.activePlayer.getID()}.`);
             return undefined;
         }
     }
 
     updatePlayersAfterTurn(winningPlayer: Player): void {
         const splitPoint = this.players.indexOf(winningPlayer);
-        log.debug(`Splitpoint: ${splitPoint}`);
+        log.silly(`[Game ${this.id}] Splitting players at index ${splitPoint}. Players is:`, this.players);
         this.players = this.moveByX(this.players, splitPoint);
+        log.silly(`[Game ${this.id}] Players after moving is:`, this.players);
         this.round.updatePlayer(this.players);
     }
 
-    moveByX(arr: Array<Player>, point: number) {
-        const temp = arr;
-        const front = temp.splice(0, point);
-        log.debug(`Cut part`, front);
-        return temp.concat(front);
+    moveByX(arr: Array<Player>, point: number): Array<Player> {
+        const initial = arr;
+        const cutPart = initial.splice(0, point);
+        log.silly(`[Game ${this.id}] Cut this from array: `, cutPart);
+        const out = initial.concat(cutPart);
+        return out;
     }
 
     endTurn(): PlayResult {
-        log.debug(`Turn end.`);
+        log.debug(`[Game ${this.id}] Ending turn.`);
         const winnerOfTurn = this.round.analyzeTurn();
-        log.debug(`Winner of Turn: ${winnerOfTurn.getID()}`);
+        log.debug(`[Game ${this.id}] Turn winner is ${winnerOfTurn.getID()}`);
         winnerOfTurn.addHit();
         this.updatePlayersAfterTurn(winnerOfTurn);
 
         const end = this.round.startNewTurn();
+
         if (end) {
+            log.info(`[Game ${this.id}] Round ${this.roundCounter} is over.`);
             this.scoreboard.analyzeRound(this.roundCounter);
-            log.debug(`Round ${this.roundCounter} is over.`);
             this.roundCounter++;
             this.startNewRound();
             return {
@@ -172,6 +168,7 @@ export class Game {
     }
 
     getHand(playerID: string): Array<Card> {
+        log.debug(`[Game ${this.id}] Returning hand for ${playerID}.`);
         const out = this.players.filter((e) => e.getID() === playerID);
         return out[0].getHand();
     }

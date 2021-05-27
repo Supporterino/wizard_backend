@@ -14,9 +14,7 @@ export class GameController {
 
     addGame(val: Game): void {
         const num = this.games.push(val);
-        log.info(
-            `Game (${val.getID()}) added to controller. Total games: ${num}.`
-        );
+        log.info(`Game (${val.getID()}) added to controller. Total games: ${num}.`);
     }
 
     getGameById(id: string): Game {

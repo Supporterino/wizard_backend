@@ -51,8 +51,7 @@ app.use('/api', router);
 
 app.use('/', (req, res) => {
     res.json({
-        msg:
-            'This is the root endpoint of wizard only. The game has two definded endpoints listed as json elements in this message.',
+        msg: 'This is the root endpoint of wizard only. The game has two definded endpoints listed as json elements in this message.',
         apiEndpoint: 'https://wizardonline.de/api',
         clientEndpoint: 'https://wizardonline.de/client',
     });
@@ -108,10 +107,7 @@ gameNamespaces.on('connection', (socket: Socket) => {
         log.debug(`[Socket <-] Receiving card play for ${value.id}.`);
         const game = controller.getGameById(gameSocket.name.substring(1));
 
-        const result = game.playTurn(
-            value.id,
-            new Card(value.card.color, value.card.char)
-        );
+        const result = game.playTurn(value.id, new Card(value.card.color, value.card.char));
 
         if (result && result.turnEnd) {
             if (result.roundEnd) {

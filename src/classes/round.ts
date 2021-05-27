@@ -25,92 +25,109 @@ export class Round {
 
     next(): PlayerReturn {
         if (this.pointer < this.players.length) {
-            return { player: this.players[this.pointer++], break: false }; //return this.players[this.pointer++];
+            log.debug(`[Round] Returning player at ${this.pointer} and increasing.`);
+            return { player: this.players[this.pointer++], break: false };
         } else {
+            log.debug(`[Round] Returning player at ${this.pointer} and resetting.`);
             this.pointer = 0;
             return { player: this.players[this.pointer++], break: true };
         }
     }
 
     start(): void {
+        log.debug(`[Round] Starting Round ${this.num}.`);
+        log.silly(`[Round] Setting up Deck.`);
         this.deck.setNewDeck();
 
+        log.silly(`[Round] Dealing Cards to Players.`);
         for (let index = 0; index < this.num; index++) {
             for (const player of this.players) {
                 this.deck.dealCard(player);
             }
         }
 
+        log.silly(`[Round] Set DominantColor.`);
         this.setDomColor();
     }
 
     startNewTurn(): boolean {
+        log.debug(`[Round] Starting new turn.`);
         this.pointer = 0;
         this.pile = new Array<Card>();
         this.turnCounter++;
-        if (this.turnCounter === this.turns) return true;
-        else return false;
+        if (this.turnCounter === this.turns) {
+            log.debug(`[Round] All turns of round played.`);
+            return true;
+        } else {
+            log.silly(`[Round] Turn ${this.turnCounter}/${this.turns}`);
+            return false;
+        }
     }
 
     setDomColor(): void {
         const topCard = this.deck.getTopCard();
-        if (topCard) this.dominantColor = topCard;
-        else this.dominantColor = new Card('', '');
-        log.debug(`Dominant Color is ${this.dominantColor.getColor()}`);
+        if (topCard) {
+            log.debug(`[Round] DominantColor is ${topCard.getColor()}.`);
+            this.dominantColor = topCard;
+        } else {
+            log.warn(`[Round] No Card received from deck.`);
+            this.dominantColor = new Card('', '');
+        }
     }
 
     playTurn(playerID: string, card: Card): boolean {
-        log.silly('Active players', this.players);
-        const toPlay = this.players
-            .filter((e) => e.getID() == playerID)[0]
-            .playCard(card);
-        log.silly(`Adding card to pile from ${playerID}`, toPlay);
+        const toPlay = this.players.filter((e) => e.getID() == playerID)[0].playCard(card);
+
+        log.silly(`[Round] ${playerID} is adding ${toPlay} to the pile.`);
+
         this.addCardToPile(toPlay);
 
         if (playerID == this.players[this.players.length - 1].getID()) {
+            log.silly(`[Round] Turn is over.`);
             return true;
         } else {
+            log.silly(`[Round] Turn still in progress.`);
             return false;
         }
     }
 
     analyzeTurn(): Player {
-        log.debug(
-            `Analyzing turn with following pile: ${this.pile.toString()}.`
-        );
+        log.debug(`[Round] Analyzing turn.`);
+        log.silly(`[Round] Pile to use:`, this.pile);
+
         let turncolor = '';
         let winningCard: Card = this.pile[0];
+
         for (let index = 0; index < this.pile.length; index++) {
-            if (turncolor === '' && this.pile[index].getColor() !== 'white')
+            if (turncolor === '' && this.pile[index].getColor() !== 'white') {
                 turncolor = this.pile[index].getColor();
-            if (
-                this.pile[index].getChar() === 'Sorcerer' &&
-                winningCard.getChar() !== 'Sorcerer'
-            )
+                log.debug(`[Round] TurnColor is ${turncolor}.`);
+            }
+            if (this.pile[index].getChar() === 'Sorcerer' && winningCard.getChar() !== 'Sorcerer') {
                 winningCard = this.pile[index];
+                log.silly(`[Round] First Sorcerer is winning turn.`);
+            }
             if (winningCard.getChar() !== 'Sorcerer') {
-                if (
-                    this.pile[index].getColor() ===
-                        this.dominantColor.getColor() &&
-                    winningCard.getColor() !== this.dominantColor.getColor()
-                )
+                if (this.pile[index].getColor() === this.dominantColor.getColor() && winningCard.getColor() !== this.dominantColor.getColor()) {
                     winningCard = this.pile[index];
-                else if (
-                    this.pile[index].getColor() ===
-                        this.dominantColor.getColor() &&
+                    log.silly(`[Round] First DominantColor is winning turn.`);
+                } else if (
+                    this.pile[index].getColor() === this.dominantColor.getColor() &&
                     winningCard.getColor() === this.dominantColor.getColor() &&
                     +this.pile[index].getChar() >= +winningCard.getChar()
-                )
+                ) {
                     winningCard = this.pile[index];
-                else if (
-                    this.pile[index].getColor() === turncolor &&
-                    +this.pile[index].getChar() >= +winningCard.getChar()
-                )
+                    log.silly(`[Round] Higher DominantColor is winning turn.`);
+                } else if (this.pile[index].getColor() === turncolor && +this.pile[index].getChar() >= +winningCard.getChar()) {
                     winningCard = this.pile[index];
+                    log.silly(`[Round] Highest TurnColor is winning turn.`);
+                }
             }
         }
-        log.debug(`Winning card: ${winningCard.toString()}.`);
-        return this.players[this.pile.indexOf(winningCard)];
+        log.debug(`[Round] Winning card: ${winningCard.toString()}.`);
+        const winner = this.players[this.pile.indexOf(winningCard)];
+        log.silly(`[Round] Winner of turn is:`, winner);
+        return winner;
     }
 
     addCardToPile(card: Card): void {

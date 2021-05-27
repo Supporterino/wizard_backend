@@ -14,35 +14,39 @@ export class Player {
     }
 
     addHit(): void {
-        log.debug(`Adding hit to ${this.id}.`);
+        log.debug(`[Player] Getting a hit.`);
         this.hit++;
     }
 
     pullHit(): number {
-        log.debug(`Retrieving hits for ${this.id}.`);
-        const temp = this.hit;
+        log.debug(`[Player] Returning hits and resetting internal counter.`);
+        const out = this.hit;
         this.hit = 0;
-        return temp;
+        return out;
     }
 
     getHitCounter(): number {
+        log.silly(`[Player] Returning hits.`);
         return this.hit;
     }
 
     getHand(): Array<Card> {
+        log.silly(`[Player] Returning hand.`);
         return this.hand;
     }
 
     receiveCard(card: Card): void {
+        log.debug(`[Player] Adding ${card.toString()} to hand.`);
         this.hand.push(card);
     }
 
     playCard(card: Card): Card {
-        log.silly(`Playing card (${card.toString()}) from hand:`, this.hand);
+        log.debug(`[Player] Playing ${card.toString()} from hand.`);
         return removeElement(this.hand, card);
     }
 
     getID(): string {
+        log.silly(`[Player] Returning ID.`);
         return this.id;
     }
 

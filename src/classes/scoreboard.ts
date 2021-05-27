@@ -11,8 +11,12 @@ export class Scoreboard {
     }
 
     initBoard(): void {
+        log.info(`[ScoreBoard] Initializing.`);
         this.board = new Array<Array<ScoreEntry>>(this.players.length);
         const max = this.getMaxRoundNumber();
+        log.debug(`[ScoreBoard] Maximum Rounds: ${max}.`);
+
+        log.silly(`[ScoreBoard] Filling board with empty entries.`);
         for (let index = 0; index < this.board.length; index++) {
             this.board[index] = new Array<ScoreEntry>(max);
             for (let i = 0; i < max; i++) {
@@ -22,25 +26,21 @@ export class Scoreboard {
     }
 
     receivePrediction(activePlayer: Player, rc: number, val: number): void {
+        log.debug(`[ScoreBoard] ${activePlayer.getID()} is prediciting ${val} for round ${rc}.`);
         this.board[this.players.indexOf(activePlayer)][rc - 1].setTarget(val);
     }
 
     analyzeRound(rc: number): void {
+        log.info(`[ScoreBoard] Analyzing round points.`);
         for (let index = 0; index < this.board.length; index++) {
             if (rc == 1) {
-                const roundScore = this.getScoreForRound(
-                    this.board[index][rc - 1].getTarget(),
-                    this.players[index].pullHit()
-                );
+                const roundScore = this.getScoreForRound(this.board[index][rc - 1].getTarget(), this.players[index].pullHit());
+                log.silly(`[ScoreBoard] ${this.players[index]} is receiving ${roundScore} points.`);
                 this.board[index][rc - 1].setScore(roundScore);
             } else {
-                const roundScore = this.getScoreForRound(
-                    this.board[index][rc - 1].getTarget(),
-                    this.players[index].pullHit()
-                );
-                this.board[index][rc - 1].setScore(
-                    this.board[index][rc - 2].getScore() + roundScore
-                );
+                const roundScore = this.getScoreForRound(this.board[index][rc - 1].getTarget(), this.players[index].pullHit());
+                log.silly(`[ScoreBoard] ${this.players[index]} is receiving ${roundScore} points.`);
+                this.board[index][rc - 1].setScore(this.board[index][rc - 2].getScore() + roundScore);
             }
         }
     }

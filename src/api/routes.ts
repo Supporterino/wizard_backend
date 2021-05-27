@@ -68,9 +68,7 @@ router.get('/getActivePlayer/:id', (req, res) => {
 
 router.post('/getHand', (req, res) => {
     const { gameID, playerID } = req.body;
-    log.debug(
-        `[REST API <-] Retrieving hand for match ${gameID} and player ${playerID}.`
-    );
+    log.debug(`[REST API <-] Retrieving hand for match ${gameID} and player ${playerID}.`);
     const game = controller.getGameById(gameID);
 
     res.json(game.getHand(playerID));
